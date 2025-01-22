@@ -7,13 +7,12 @@ import ReenterPassword from './ReenterPassword.tsx';
 import EmailInput from './EmailInput.tsx';
 import PhoneInput from './PhoneInput.tsx';
 import '../Styles/ModalWindow.css';
-import config from '../Configurations/Config.ts'
+import { registerUser } from '../Api/Auth.ts'
 
 
 const SignUpModalWindow: React.FC<SignUpModalWindowProps> = ({
     closeSignUpModalWindow,
     handleFromSignUpToSignIn,
-    checkIfEmailExists,
 }) => {
     const [email, setEmail] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
@@ -39,26 +38,12 @@ const SignUpModalWindow: React.FC<SignUpModalWindowProps> = ({
             role: 'Patient',
         };
 
-        try {
-            const response = await fetch(config.AuthServiceRegisterUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+        const signUpResult: boolean = await registerUser(formData);
 
-            if (!response.ok) {
-                throw new Error('Failed to sign up');
-            }
-
-            const result = await response.json();
+        if (signUpResult) {
             alert('Sign up successful!');
-            console.log(result);
-
             closeSignUpModalWindow();
-        } catch (error) {
-            console.error(error);
+        } else {
             alert('An error occurred while signing up. Please try again.');
         }
     };
@@ -86,7 +71,6 @@ const SignUpModalWindow: React.FC<SignUpModalWindowProps> = ({
                 <div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <EmailInput
-                            checkIfEmailExists={checkIfEmailExists}
                             email={email}
                             setEmail={setEmail}
                             emailError={emailError}

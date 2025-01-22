@@ -5,12 +5,12 @@ import Button from '@mui/material/Button';
 import PasswordInputSignIn from './PasswordInputSignIn.tsx';
 import EmailInput from './EmailInput.tsx';
 import '../Styles/ModalWindow.css';
-import config from '../Configurations/Config.ts'
+import config from '../Configurations/Config.ts';
+import { loginUser } from '../Api/Auth.ts';
 
 const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
     closeSignInModalWindow,
     handleFromSingInToSignUp,
-    checkIfEmailExists,
     signInError,
     setSignInError,
 }) => {
@@ -27,26 +27,12 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
             password,
         };
 
-        try {
-            const response = await fetch(config.AuthServiceLoginUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+        const signInResult: boolean = await loginUser(formData);
 
-            if (!response.ok) {
-                throw new Error('Failed to sign in');
-            }
-
-            const result = await response.json();
+        if (signInResult) {
             alert('Sign in successful!');
-            console.log(result);
-
-            closeSignInModalWindow();
-        } catch (error) {
-            console.error(error);
+             closeSignInModalWindow();
+        } else {
             setSignInError(true);
         }
     };
@@ -65,7 +51,6 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
                 <div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <EmailInput
-                            checkIfEmailExists={checkIfEmailExists}
                             email={email}
                             setEmail={setEmail}
                             emailError={emailError}

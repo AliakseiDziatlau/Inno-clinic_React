@@ -2,10 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { EmailInputProps } from '../Types/EmailInputProps';
 import {IconButton, Input, InputLabel, InputAdornment, FormHelperText, FormControl} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { checkIfEmailExists } from '../Api/Auth.ts';
 
 const EmailInput: React.FC<EmailInputProps> = ({
-    checkIfEmailExists,
     email,
     setEmail,
     emailError,
