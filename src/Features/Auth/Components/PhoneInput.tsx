@@ -1,7 +1,6 @@
 import React from 'react';
 import { PhoneInputProps } from '../Types/PhoneInputProps';
-import {IconButton, Input, InputLabel, InputAdornment, FormHelperText, FormControl} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {Input, InputLabel, FormHelperText, FormControl} from '@mui/material';
 
 const PhoneInput: React.FC<PhoneInputProps> = ({
     phone,

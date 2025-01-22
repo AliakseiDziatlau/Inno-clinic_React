@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import PasswordInputSignIn from './PasswordInputSignIn.tsx';
 import EmailInput from './EmailInput.tsx';
 import '../Styles/ModalWindow.css';
-import config from '../Configurations/Config.ts';
 import { loginUser } from '../Api/Auth.ts';
 
 const SignInModalWindow: React.FC<SignInModalWindowProps> = ({

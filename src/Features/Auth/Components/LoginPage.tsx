@@ -3,7 +3,6 @@ import React from 'react';
 import SignInModalWindow from './SignInModalWindow.tsx';
 import SignUpModalWindow from './SingUpModalWindow.tsx';
 import Button from './Button.tsx';
-import config from '../Configurations/Config.ts'
 
 const LoginPage: React.FC = () => {
     const [isSignUpWindow, setIsSignUpWindow] = useState<boolean>(false);

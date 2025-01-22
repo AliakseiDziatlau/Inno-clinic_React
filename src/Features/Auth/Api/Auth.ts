@@ -1,4 +1,4 @@
-import config from '../Configurations/Config.ts'
+import config from '../../../Configurations/Config.ts'
 
 export const checkIfEmailExists = async (email: string): Promise<boolean> => {
     try{

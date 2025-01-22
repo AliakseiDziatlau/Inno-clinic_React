@@ -1,6 +1,6 @@
 import React from 'react';
-import LoginPage from './LoginPage.tsx';
-import '../Styles/App.css';
+import LoginPage from './Features/Auth/Components/LoginPage.tsx';
+import './App.css';
 
 const App: React.FC = () => {
   return (
