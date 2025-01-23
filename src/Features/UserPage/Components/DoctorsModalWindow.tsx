@@ -2,9 +2,11 @@ import React from 'react';
 import '../Styles/DoctorsModalWindow.css';
 import { DoctorsModalWindowProps } from '../Types/DoctorsModalWindowProps';
 import DoctorCardsContainer from './DoctorsCardsContainer.tsx';
+import DoctorFiltersContainer from './DoctorFiltersContainer.tsx'
 
 const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,
+    doctorsList
 }) => {
     return (
         <div className="modal-overlay">
@@ -15,8 +17,8 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
                 >
                     &times;
                 </button>
-
-                <DoctorCardsContainer/>
+                <DoctorFiltersContainer/>
+                <DoctorCardsContainer doctorsList={doctorsList}/>
             </div>
         </div>
     );

@@ -1,19 +1,22 @@
 import React from 'react';
 import DoctorCard from './DoctorCard.tsx';
-import { doctors } from '../Data/Doctors.ts';
+
+import { DoctorsCardsContainerProps } from '../Types/DoctorsCardsContainerProps.ts';
 import '../Styles/DoctorCardsContainer.css'
 
-const DoctorCardsContainer: React.FC = () => {
+const DoctorCardsContainer: React.FC<DoctorsCardsContainerProps> = ({
+    doctorsList,
+}) => {
     return (
         <div className="cards-container">
-            {doctors.map((doctor) => (
+            {doctorsList.map((doctor) => (
                 <DoctorCard
                     photo={"photo"}
-                    firstName={doctor.FirstName}
-                    middleName={doctor.MiddleName}
-                    lastName={doctor.LastName}
-                    experience={doctor.CareerStartYear-2025+1}
-                    officeAddress={doctor.OfficeId}
+                    firstName={doctor.firstName}
+                    middleName={doctor.middleName}
+                    lastName={doctor.lastName}
+                    experience={2025-doctor.careerStartYear+1}
+                    officeAddress={doctor.officeId}
                 />
             ))}
          </div>
