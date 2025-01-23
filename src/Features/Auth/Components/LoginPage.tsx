@@ -2,9 +2,15 @@ import { useState } from 'react';
 import React from 'react';
 import SignInModalWindow from './SignInModalWindow.tsx';
 import SignUpModalWindow from './SingUpModalWindow.tsx';
-import Button from './Button.tsx';
+// import Button from './Button.tsx';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box';
+import '../Styles/LoginPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
+    const navigate = useNavigate();
     const [isSignUpWindow, setIsSignUpWindow] = useState<boolean>(false);
     const [isSignInWindow, setIsSignInWindow] = useState<boolean>(false);
     const [signInError, setSignInError] = useState<boolean>(false);
@@ -35,10 +41,22 @@ const LoginPage: React.FC = () => {
         setIsSignInWindow(true);
     }; 
 
+    const handleGoToUserPage = () => {
+        navigate('/profile');
+    }
+
     return (
-        <div>
-            <Button onClick={openSignUpModalWindow}>Sign up</Button>
-            <Button onClick={openSignInModalWindow}>Sign in</Button>
+        <div className='login-page-container'>
+            <h1 className='inno-clinic'>INNO-CLINIC</h1>
+            <p className='choosing-option'>Choose your option</p>
+            <ButtonGroup 
+                variant="text" 
+                aria-label="Basic button group"
+            >
+                <Button onClick={openSignUpModalWindow}>Sign Up</Button>
+                <Button onClick={openSignInModalWindow}>Sign In</Button>
+            </ButtonGroup>
+            <button onClick={handleGoToUserPage}>go to user page</button>
             {isSignUpWindow && (
                 <SignUpModalWindow
                     closeSignUpModalWindow={closeSignUpModalWindow}

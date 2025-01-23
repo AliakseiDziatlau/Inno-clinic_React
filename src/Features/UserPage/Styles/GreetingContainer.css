@@ -1,0 +1,21 @@
+.greeting-container{
+    position: absolute; 
+    top: 0;             
+    right: 0;        
+    margin: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.greeting{
+    animation: fadeIn 1s ease-in-out;
+}

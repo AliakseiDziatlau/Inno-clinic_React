@@ -1,0 +1,43 @@
+.login-page-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    flex-direction: column;
+}
+
+.inno-clinic{
+    font-family: 'Playfair Display', serif;
+    font-size: 10rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.9);
+}
+
+.choosing-option{
+    font-family: 'Roboto', sans-serif;
+    font-size: 4rem;
+    margin-top: 1rem;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.inno-clinic{
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+.choosing-option{
+    animation: fadeIn 1.5s ease-in-out;
+}
