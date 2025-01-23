@@ -1,6 +1,7 @@
 import React from 'react';
 import '../Styles/DoctorsModalWindow.css';
 import { DoctorsModalWindowProps } from '../Types/DoctorsModalWindowProps';
+import DoctorCardsContainer from './DoctorsCardsContainer.tsx';
 
 const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,
@@ -14,6 +15,8 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
                 >
                     &times;
                 </button>
+
+                <DoctorCardsContainer/>
             </div>
         </div>
     );
