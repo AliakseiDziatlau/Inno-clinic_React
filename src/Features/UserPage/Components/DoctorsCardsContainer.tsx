@@ -1,6 +1,7 @@
 import React from 'react';
 import DoctorCard from './DoctorCard.tsx';
-import { doctors } from '../Data/Doctors.ts'
+import { doctors } from '../Data/Doctors.ts';
+import '../Styles/DoctorCardsContainer.css'
 
 const DoctorCardsContainer: React.FC = () => {
     return (
