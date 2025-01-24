@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState } from 'react';
+import { Doctor } from '../Types/Doctor.ts';
 import '../Styles/DoctorsModalWindow.css';
 import { DoctorsModalWindowProps } from '../Types/DoctorsModalWindowProps';
 import DoctorCardsContainer from './DoctorsCardsContainer.tsx';
@@ -8,6 +10,8 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,
     doctorsList
 }) => {
+    const [filteredDoctorsList, setFilteredDoctorsList] = useState<Doctor[]>(doctorsList);
+    
     return (
         <div className="modal-overlay">
             <div className="modal-window">
@@ -17,8 +21,12 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
                 >
                     &times;
                 </button>
-                <DoctorFiltersContainer/>
-                <DoctorCardsContainer doctorsList={doctorsList}/>
+                <DoctorFiltersContainer 
+                    doctorList={doctorsList}
+                    filteredDoctorList={filteredDoctorsList} 
+                    setFilteredDoctorsList={setFilteredDoctorsList}
+                />
+                <DoctorCardsContainer filteredDoctorsList={filteredDoctorsList}/>
             </div>
         </div>
     );

@@ -5,11 +5,11 @@ import { DoctorsCardsContainerProps } from '../Types/DoctorsCardsContainerProps.
 import '../Styles/DoctorCardsContainer.css'
 
 const DoctorCardsContainer: React.FC<DoctorsCardsContainerProps> = ({
-    doctorsList,
+    filteredDoctorsList,
 }) => {
     return (
         <div className="cards-container">
-            {doctorsList.map((doctor) => (
+            {filteredDoctorsList.map((doctor) => (
                 <DoctorCard
                     photo={"photo"}
                     firstName={doctor.firstName}

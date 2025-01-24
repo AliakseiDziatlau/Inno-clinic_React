@@ -7,6 +7,7 @@ import GreetingComponent from './GreetingComponent.tsx';
 import DoctorsModalWindow from './DoctorsModalWindow.tsx';
 import { getDoctorsList } from '../Api/DoctorMethods.ts';
 import { Doctor } from '../Types/Doctor.ts';
+import MenuContainer from './MenuContainer.tsx';
 
 const UserPage: React.FC = () => {
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
@@ -23,9 +24,8 @@ const UserPage: React.FC = () => {
 
     return (
         <div className="user-container">
-            <SignOutContainer/>
-            <GreetingComponent/>
-            <Button variant="text" onClick={handleOurDoctorsBtn}>Our doctors</Button>
+            <GreetingComponent />
+            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
             {isDoctorWindowOpened && <DoctorsModalWindow
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
                 doctorsList={doctorsList}            
