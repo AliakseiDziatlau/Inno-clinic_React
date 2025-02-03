@@ -25,6 +25,10 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
         setIsMenuOpened(false);
     }
 
+    const handleMyProfileBtn = () => {
+        navigate('/profile/personal-account')
+    }
+
     return (
         <div>
             {isMenuOpened ?
@@ -32,6 +36,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
                     handleCloseMenuBtn={handleCloseMenuBtn}
                     handleOurDoctorsBtn={handleOurDoctorsBtn}
                     handleSignOutButton={handleSignOutButton}
+                    handleMyProfileBtn={handleMyProfileBtn}
                 />
                 :
                 <MenuButton handleOpenMenuBtn={handleOpenMenuBtn}/>

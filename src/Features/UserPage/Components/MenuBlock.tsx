@@ -7,6 +7,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
     handleSignOutButton,
     handleOurDoctorsBtn,
     handleCloseMenuBtn,
+    handleMyProfileBtn,
 }) => {
     return (
         <div className="menu-container">
@@ -21,6 +22,12 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
                 onClick={handleOurDoctorsBtn}
             >
                 Our doctors
+            </Button>
+            <Button 
+                variant="text"
+                onClick={handleMyProfileBtn} 
+            >
+                My Profile
             </Button>
             <button 
                 className="close-button"

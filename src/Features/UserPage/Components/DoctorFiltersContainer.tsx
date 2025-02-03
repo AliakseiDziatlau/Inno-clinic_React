@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import '../Styles/DoctorFiltersContainer.css';
@@ -14,6 +15,12 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
     const [filterLastName, setFilterLastName] = useState<string>('');
     const [filterOffice, setFilterOffice] = useState<string>('');
+
+    const navigate = useNavigate();
+
+    const handleOpenMapBtn = () => {
+        navigate('/profile/map');
+    }
 
     const handleApplyBtn = (e) => {
         e.preventDefault();
@@ -67,6 +74,7 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
                 onChange={(e) => setFilterOffice(e.target.value)}
             />
             <Button variant="text" onClick={handleApplyBtn}>Apply</Button>
+            <Button variant="text" onClick={handleOpenMapBtn}>Open Map</Button>
         </div>
     );
 }

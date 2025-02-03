@@ -9,6 +9,10 @@ import { getDoctorsList } from '../Api/DoctorMethods.ts';
 import { Doctor } from '../Types/Doctor.ts';
 import MenuContainer from './MenuContainer.tsx';
 
+import { MapContainer, TileLayer } from "react-leaflet";
+import { LatLngExpression } from "leaflet";
+import "leaflet/dist/leaflet.css";
+
 const UserPage: React.FC = () => {
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
     const [doctorsList, setDoctorsList] = useState<Doctor[]>([]);
@@ -30,6 +34,12 @@ const UserPage: React.FC = () => {
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
                 doctorsList={doctorsList}            
             />}
+            {/* <MapContainer center={[48.8556, 2.3522]} zoom={13}>
+                <TileLayer 
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                />
+            </MapContainer> */}
         </div>
     );
 }
