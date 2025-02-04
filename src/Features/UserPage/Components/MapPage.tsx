@@ -1,11 +1,18 @@
 import React from 'react';
+
 import '../Styles/DoctorsModalWindow.css';
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../Styles/MapPage.css";
 import { MapMarker } from '../Types/MapMarker.ts';
-import { Icon } from "leaflet";
+import { Icon, divIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import { MarkerCluster } from "leaflet.markercluster";
+import OfficeModalWindow from './OfficeMadalWindow.tsx';
+import { useState } from 'react';
+
 const MapPage: React.FC = () => {
+    const [isOfficeWindowOpened, setIsOfficeWindowOpened] = useState<boolean>(false);
 
     const markers: MapMarker[]  = [
         { geocode: [52.2298, 21.0122], popUp: "Center of Warsaw" },
@@ -20,6 +27,18 @@ const MapPage: React.FC = () => {
         iconSize: [38, 38],
     });
 
+    const createCustomClusterIcon = (cluster: any) => {
+        return divIcon({
+            html: `<div class="cluster-icon">${cluster.getChildCount()}</div>`,
+            className: "custom-cluster-icon",
+            iconSize: point(33, 33, true),
+        });
+    };
+
+    const handlePopupClick = () => {
+        setIsOfficeWindowOpened(true);
+    }
+
 
     return (
         <div>
@@ -29,10 +48,26 @@ const MapPage: React.FC = () => {
                     url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
 
-                {markers.map(marker => (
-                    <Marker position={marker.geocode} icon={customIcon}></Marker>
-                ))}
+                <MarkerClusterGroup
+                    chunkedLoading
+                    iconCreateFunction={createCustomClusterIcon}
+                >
+                    {markers.map(marker => (
+                        <Marker 
+                            position={marker.geocode} 
+                            icon={customIcon}
+                            eventHandlers={{
+                                click: () => handlePopupClick() 
+                            }}
+                        >
+                            <Popup>
+                                <h2>{marker.popUp}</h2>
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MarkerClusterGroup>
             </MapContainer>
+            {isOfficeWindowOpened && <OfficeModalWindow />}
         </div>
     );
 }
