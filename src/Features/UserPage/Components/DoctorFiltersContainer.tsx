@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import '../Styles/DoctorFiltersContainer.css';
 import Button from '@mui/material/Button';
 import { DoctorFiltersContainerProps } from '../Types/DoctorFiltersContainerProps';
+import config from '../../../Configurations/Config.ts';
 
 const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     doctorList,
     filteredDoctorList,
     setFilteredDoctorsList,
+    filterOfficeFromMap
 }) => {
     const [filterFirstName, setFilterFirstName] = useState<string>('');
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
     const [filterLastName, setFilterLastName] = useState<string>('');
-    const [filterOffice, setFilterOffice] = useState<string>('');
+    const [filterOffice, setFilterOffice] = useState<string>(filterOfficeFromMap);
 
     const navigate = useNavigate();
 
     const handleOpenMapBtn = () => {
-        navigate('/profile/map');
+        navigate(config.PatientPageMapUrl);
     }
 
     const handleApplyBtn = (e) => {

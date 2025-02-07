@@ -4,7 +4,9 @@ import { OfficeModalWindowProps } from '../Types/OfficeModalWindowProps.ts';
 import Button from '@mui/material/Button';
 
 const OfficeModalWindow: React.FC<OfficeModalWindowProps> = ({
-    handleCloseModalWindow
+    handleCloseModalWindow,
+    officeAddress,
+    handleSelectOffice
 }) => {
 
     return (
@@ -21,8 +23,13 @@ const OfficeModalWindow: React.FC<OfficeModalWindowProps> = ({
                     alt="Office"
                     className="modal-image"
                 />
-                <p>Address</p>
-                <Button variant="text">Apply</Button>
+                <p>{officeAddress}</p>
+                <Button 
+                    variant="text" 
+                    onClick={() => handleSelectOffice(officeAddress)}
+                >
+                    Apply
+                </Button>
             </div>
         </div>
     );

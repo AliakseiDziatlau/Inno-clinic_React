@@ -1,20 +1,24 @@
 import React from 'react';
-import SignOutContainer from './SignOutContainer.tsx';
-import Button from '@mui/material/Button';
 import { MenuContainerProps } from '../Types/MenuContainer.ts';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import MenuButton from './MenuButton.tsx';
 import MenuBlock from './MenuBlock.tsx';
-
+import { logout } from '../../Auth/Api/Auth.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import config from '../../../Configurations/Config.ts';
 
 const MenuContainer: React.FC<MenuContainerProps> = ({
-    handleOurDoctorsBtn
+    handleOurDoctorsBtn,
+    currUser,
 }) => {
+    const { setAccessToken, accessToken } = useAuth();
     const navigate = useNavigate();
     const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
-    const handleSignOutButton = () => {
-        navigate('/')
+
+    const handleSignOutButton = async () => {
+        await logout(setAccessToken);
+        navigate(config.LoginPageUrl);
     }
 
     const handleOpenMenuBtn = () => {
@@ -26,7 +30,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
     }
 
     const handleMyProfileBtn = () => {
-        navigate('/profile/personal-account')
+        navigate(config.PatientPageProfileUrl, {state: {currUser}});
     }
 
     return (

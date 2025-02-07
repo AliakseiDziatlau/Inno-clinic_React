@@ -4,4 +4,5 @@ export interface DoctorFiltersContainerProps {
     doctorList: Doctor[];
     filteredDoctorList: Doctor[];
     setFilteredDoctorsList: (doctrs: Doctor[]) => void;
+    filterOfficeFromMap: string;
 }

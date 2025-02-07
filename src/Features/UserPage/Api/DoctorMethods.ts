@@ -1,5 +1,5 @@
-import config from '../../../Configurations/Config.ts'
-import { Doctor } from '../Types/Doctor.ts'
+import config from '../../../Configurations/Config.ts';
+import { Doctor } from '../Types/Doctor.ts';
 
 export const getDoctorsList = async(): Promise<Doctor[]> => {
     try{

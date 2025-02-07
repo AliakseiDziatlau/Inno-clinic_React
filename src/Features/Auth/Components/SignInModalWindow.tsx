@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react';
 import { SignInModalWindowProps } from '../Types/SignInModalWindowProps';
 import Button from '@mui/material/Button';
@@ -6,6 +6,11 @@ import PasswordInputSignIn from './PasswordInputSignIn.tsx';
 import EmailInput from './EmailInput.tsx';
 import '../Styles/ModalWindow.css';
 import { loginUser } from '../Api/Auth.ts';
+import { useNavigate } from 'react-router-dom';
+import { TokensObject } from '../Types/TokensObject.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import config from '../../../Configurations/Config.ts';
+import { LoginResult } from '../Types/LoginResult.ts';
 
 const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
     closeSignInModalWindow,
@@ -13,10 +18,14 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
     signInError,
     setSignInError,
 }) => {
+    const { setAccessToken, accessToken, setUserRole } = useAuth();
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [passwordError, setPasswordError] = useState<string>('');
+    const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
+    const [role, setRole] = useState<string | null>(null);
 
     const handleSignInButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -26,15 +35,35 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
             password,
         };
 
-        const signInResult: boolean = await loginUser(formData);
+        const loginResult:LoginResult | null = await loginUser(formData);
 
-        if (signInResult) {
-            alert('Sign in successful!');
-             closeSignInModalWindow();
+        if (loginResult !== null) {
+            setIsSigningIn(true);
+            setAccessToken(loginResult.accessToken);
+            setUserRole(loginResult.userRole);
+            setRole(loginResult.userRole);
         } else {
             setSignInError(true);
         }
     };
+
+    useEffect(() => {
+        if (accessToken && isSigningIn) {
+            console.log(`Access token: ${accessToken}`);
+            if (role === 'Patient') {
+                navigate(config.PatientPageUrl, { state: {email}} );
+            } else if (role === 'Doctor') {
+                navigate(config.DoctorPageUrl, { state: {email}} );
+            } else if(role === 'Receptionist') {
+                navigate(config.ReceptionistPageUrl, { state: {email}} )
+            } else {
+                console.error("role is undefined");
+            }
+
+            setIsSigningIn(false);
+        }
+    }, [accessToken, isSigningIn, navigate, email]);
+
 
     const isFormValid = (): boolean => {
         return !!(email && !emailError && password && !passwordError);
@@ -65,13 +94,15 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
                             setSignInError={setSignInError}
                         />
                     </div>
-                    <Button
-                        variant="contained"
-                        onClick={handleSignInButton}
-                        disabled={!isFormValid()}
-                    >
-                        Sign in
-                    </Button>
+                    <div className="button-container">
+                        <Button
+                            variant="contained"
+                            onClick={handleSignInButton}
+                            disabled={!isFormValid()}
+                        >
+                            Sign in
+                        </Button>
+                    </div>
                 </div>
                 <p>
                     Don't have an account?{' '}

@@ -3,12 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Button from '@mui/material/Button';
 import '../Styles/SignOutContainer.css';
+import { logout } from '../../Auth/Api/Auth.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const SignOutContainer: React.FC = () => {
     const navigate = useNavigate();
+    const { setAccessToken } = useAuth();
     
-    const handleSignOutButton = () => {
-        navigate('/')
+    const handleSignOutButton = async () => {
+        console.log("Кнопка Sign Out нажата");
+        console.log("Перед logout, accessToken:", localStorage.getItem("accessToken"));
+    
+        await logout(setAccessToken); // ✅ Ждем завершения logout
+    
+        console.log("После logout, accessToken:", localStorage.getItem("accessToken")); // Должен быть null
+       // navigate('/');
+    
     }
 
     return (

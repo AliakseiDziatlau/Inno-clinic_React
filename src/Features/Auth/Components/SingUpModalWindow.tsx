@@ -97,13 +97,15 @@ const SignUpModalWindow: React.FC<SignUpModalWindowProps> = ({
                             setReenterPasswordError={setReenterPasswordError}
                         />
                     </div>
-                    <Button
-                        variant="contained"
-                        onClick={handleSignUpButton}
-                        disabled={!isFormValid()}
-                    >
-                        Sign up
-                    </Button>
+                    <div className="button-container">
+                        <Button
+                            variant="contained"
+                            onClick={handleSignUpButton}
+                            disabled={!isFormValid()}
+                        >
+                            Sign up
+                        </Button>
+                    </div>
                 </div>
                 <p>
                     Already have an account?{' '}

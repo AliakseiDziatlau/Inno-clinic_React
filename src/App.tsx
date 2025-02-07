@@ -5,16 +5,17 @@ import UserPage from './Features/UserPage/Components/UserPage.tsx';
 import UserProfilePage from './Features/UserPage/Components/UserProfilePage.tsx'
 import './App.css';
 import MapPage from './Features/UserPage/Components/MapPage.tsx';
+import config from './Configurations/Config.ts';
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />}/>
-        <Route path="/profile" element={<UserPage />}/>
-        <Route path="/profile/personal-account" element={<UserProfilePage/>} />
-        <Route path="/profile/map" element={<MapPage />} />
-      </Routes>
+        <Route path={config.LoginPageUrl} element={<LoginPage />}/>
+        <Route path={config.PatientPageUrl} element={<UserPage />}/>
+        <Route path={config.PatientPageProfileUrl} element={<UserProfilePage/>} />
+        <Route path={config.PatientPageMapUrl} element={<MapPage />} />
+      </Routes >
     </Router>
   );
 };

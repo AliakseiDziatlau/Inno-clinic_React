@@ -1,21 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import '../Styles/UserPage.css';
-import Button from '@mui/material/Button';
-import SignOutContainer from './SignOutContainer.tsx';
 import GreetingComponent from './GreetingComponent.tsx';
 import DoctorsModalWindow from './DoctorsModalWindow.tsx';
 import { getDoctorsList } from '../Api/DoctorMethods.ts';
 import { Doctor } from '../Types/Doctor.ts';
 import MenuContainer from './MenuContainer.tsx';
-
-import { MapContainer, TileLayer } from "react-leaflet";
-import { LatLngExpression } from "leaflet";
+import { useLocation } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
+import { useUser } from '../../../Contexts/UserContext.tsx';
 
 const UserPage: React.FC = () => {
+    const location = useLocation();
+    const { currUser, fetchUser } = useUser();
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
     const [doctorsList, setDoctorsList] = useState<Doctor[]>([]);
+    const [filterOffice, setFilterOffice] = useState<string>("");
+    const email = location.state?.email;
+
+    useEffect(() => {
+        if(email && !currUser) {
+            fetchUser(email);
+        }
+
+        if(location.state?.openModal) {
+            setIsDoctorWindowOpened(true);
+        }
+
+        if(location.state?.selectedOffice) {
+            setFilterOffice(location.state.selectedOffice);
+        }
+
+    }, [location.state, email]);
 
     const handleOurDoctorsBtn = async() => {
         setDoctorsList(await getDoctorsList());
@@ -24,22 +40,18 @@ const UserPage: React.FC = () => {
 
     const closeDoctorsModalWindow = () => {
         setIsDoctorWindowOpened(false);
+        setFilterOffice("");
     }
 
     return (
         <div className="user-container">
             <GreetingComponent />
-            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
+            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} currUser={currUser}/>
             {isDoctorWindowOpened && <DoctorsModalWindow
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
-                doctorsList={doctorsList}            
+                doctorsList={doctorsList}
+                filterOffice={filterOffice}            
             />}
-            {/* <MapContainer center={[48.8556, 2.3522]} zoom={13}>
-                <TileLayer 
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-                />
-            </MapContainer> */}
         </div>
     );
 }

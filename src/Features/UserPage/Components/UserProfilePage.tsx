@@ -1,15 +1,21 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../Styles/UserProfilePage.css';
 import CardMedia from '@mui/material/CardMedia';
 import UserProfileInfoContainer from './UserProfileInfoContainer.tsx';
 import Button from '@mui/material/Button';
+import { User } from '../Types/User.ts';
+import { useUser } from '../../../Contexts/UserContext.tsx';
+import config from '../../../Configurations/Config.ts';
 
 const UserProfilePage: React.FC = () => {
     const navigate = useNavigate();
+    const { currUser } = useUser();
+    const location = useLocation();
 
     const handleGoBackBtn = () => {
-        navigate('/profile');
+        navigate(config.PatientPageUrl);
     }
 
     return (
@@ -31,25 +37,25 @@ const UserProfilePage: React.FC = () => {
             <div className="inline-container">
                 <UserProfileInfoContainer
                     title="Last Name"
-                    value="mln"
+                    value={currUser?.lastName ?? ""}
                 />
                 <UserProfileInfoContainer
                     title="First Name"
-                    value="mfn"
+                    value={currUser?.firstName ?? ""}
                 />
                 <UserProfileInfoContainer
                     title="Middle Name"
-                    value="mmn"
+                    value={currUser?.middleName ?? ""}
                 />
             </div>
             <div className="inline-container">
                 <UserProfileInfoContainer
                     title="Phone Number"
-                    value="mpn"
+                    value={currUser?.phoneNumber ?? ""}
                 />
                 <UserProfileInfoContainer
                     title="Date of Birth"
-                    value="mdb"
+                    value={currUser?.dateOfBirth ?? ""}
                 />
             </div>
         </div>
