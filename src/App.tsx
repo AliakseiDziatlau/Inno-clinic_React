@@ -5,6 +5,7 @@ import UserPage from './Features/UserPage/Components/UserPage.tsx';
 import UserProfilePage from './Features/UserPage/Components/UserProfilePage.tsx'
 import './App.css';
 import MapPage from './Features/UserPage/Components/MapPage.tsx';
+import ReceptionistPage from './Features/ReceptionistPage/Components/ReceptionistPage.tsx';
 import config from './Configurations/Config.ts';
 
 const App: React.FC = () => {
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Route path={config.PatientPageUrl} element={<UserPage />}/>
         <Route path={config.PatientPageProfileUrl} element={<UserProfilePage/>} />
         <Route path={config.PatientPageMapUrl} element={<MapPage />} />
+        <Route path={config.ReceptionistPageUrl} element={<ReceptionistPage />}/>
       </Routes >
     </Router>
   );
