@@ -7,6 +7,7 @@ const config = {
     ProfilesServicePatientsUrl: "http://localhost:5003/api/patients",
     AuthServiceRefreshToken: "http://localhost:5001/api/auths/refresh-token",
     AuthServiceLogout: "http://localhost:5001/api/auths/logout",
+    ProfilesServiceCreateDoctorsProfileUrl: "http://localhost:5003/api/doctors",
     LoginPageUrl: "/",
     PatientPageUrl: "/patient-page",
     PatientPageProfileUrl: "/patient-page/profile",

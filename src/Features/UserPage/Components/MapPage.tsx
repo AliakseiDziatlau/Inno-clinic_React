@@ -93,7 +93,6 @@ const MapPage: React.FC = () => {
                     </Stack>
                 </Box>
             ) : (
-                // 🔹 Если загрузка завершена — показываем карту
                 <MapContainer center={[52.2298, 21.0122]} zoom={13} className="leaflet-container">
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
