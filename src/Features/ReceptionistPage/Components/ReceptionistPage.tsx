@@ -8,14 +8,19 @@ import { Doctor } from '../../UserPage/Types/Doctor.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { useLocation } from 'react-router-dom';
+import OfficeModalWindow from './OfficeModalWindow.tsx';
+import CreateOfficeWindow from './CreateOfficeWindow.tsx';
 
 const ReceptionistPage: React.FC = () => {
     const location = useLocation();
     const [isCreateDoctorWindowOpened, setIsCreateDoctorWindowOpened] = useState<boolean>(false);
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
+    const [isOfficeWindowOpened, setIsOfficeWindowOpened] = useState<boolean>(false);
+    const [isCreateOfficeWindowOpened, setIsCreateOfficeWindowOpened] = useState<boolean>(false);
     const [doctorList, setDoctorList] = useState<Doctor[]>([]);
     const [officeList, setOfficeList] = useState<Office[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(false);
+    const [isLoadingOffices, setIsLoadingOffices] = useState<boolean>(false);
 
     useEffect(() => {
         const openDoctorWindow = async () => {
@@ -38,7 +43,7 @@ const ReceptionistPage: React.FC = () => {
 
     const handleOpenDoctorWindow = async () => {
         setIsDoctorWindowOpened(true); 
-        setIsLoading(true); 
+        setIsLoadingDoctors(true); 
 
         try {
             const doctors = await getDoctorsList();
@@ -49,7 +54,7 @@ const ReceptionistPage: React.FC = () => {
         } catch (error) {
             console.error("Error with loading data", error);
         } finally {
-            setIsLoading(false); 
+            setIsLoadingDoctors(false); 
         }
     }
 
@@ -57,12 +62,38 @@ const ReceptionistPage: React.FC = () => {
         setIsDoctorWindowOpened(false);
     }
 
+    const handleOpenOfficeWindow = async () => {
+        setIsOfficeWindowOpened(true);
+        setIsLoadingOffices(true);
 
+        try {
+            const offices = await getOffices();
+            setOfficeList(offices);
+        } catch (error) {
+            console.error("Error with loading data", error);
+        } finally {
+            setIsLoadingOffices(false); 
+        }
+    }
+
+    const handleCloseOfficeWindow = () => {
+        setIsOfficeWindowOpened(false);
+    }
+
+    const handleOpenCreateOfficeWindow = () => {
+        setIsCreateOfficeWindowOpened(true);
+        setIsOfficeWindowOpened(false);
+    }
+
+    const handleCloseCreateOfficeWindow = () => {
+        setIsCreateOfficeWindowOpened(false);
+    }
 
     return (
         <div>
             <MenuContainer 
                 handleOpenDoctorWindow={handleOpenDoctorWindow}
+                handleOpenOfficeWindow={handleOpenOfficeWindow}
             />
             {isCreateDoctorWindowOpened && 
                 <CreateDoctorWindow 
@@ -74,8 +105,21 @@ const ReceptionistPage: React.FC = () => {
                     handleCloseDoctorWindow={handleCloseDoctorWindow}
                     doctorList={doctorList}
                     officeList={officeList}
-                    isLoading={isLoading}
+                    isLoading={isLoadingDoctors}
                     handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
+                />
+            }
+            {isOfficeWindowOpened &&
+                <OfficeModalWindow 
+                    officeList={officeList}
+                    isLoading={isLoadingOffices}
+                    handleCloseOfficeWindow={handleCloseOfficeWindow}
+                    handleOpenCreateOfficeWindow={handleOpenCreateOfficeWindow}
+                />
+            }
+            {isCreateOfficeWindowOpened &&
+                <CreateOfficeWindow 
+                    handleCloseCreateOfficeWindow={handleCloseCreateOfficeWindow}
                 />
             }
         </div>

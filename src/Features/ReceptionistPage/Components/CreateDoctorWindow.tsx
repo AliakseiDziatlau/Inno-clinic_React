@@ -19,6 +19,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
     handleCloseCreateDoctorWindow,
 }) => {
     const [isCancelWindowOpened, setIsCancelWindowOpened] = useState<boolean>(false);
+
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [middleName, setMiddleName] = useState<string>('');
@@ -29,6 +30,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
     const [status, setStatus] = useState<string>('');
     const [photo, setPhoto] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+
     const [firstNameError, setFirstNameError] = useState<string>('');
     const [lastNameError, setLastNameError] = useState<string>('');
     const [middleNameError, setMiddleNameError] = useState<string>('');
@@ -38,6 +40,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
     const [startYearError, setStartYearError] = useState<string>('');
     const [statusError, setStatusError] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
+
     const [isFirstNameTouched, setIsFirstNameTouched] = useState<boolean>(false);
     const [isLastNameTouched, setIsLastNameTouched] = useState<boolean>(false);
     const [isMiddleNameTouched, setIsMiddleNameTouched] = useState<boolean>(false);
@@ -47,6 +50,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
     const [isStartYearTouched, setIsStartYearTouched] = useState<boolean>(false);
     const [isStatusTouched, setIsStatusTouched] = useState<boolean>(false);
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
+    
     const [loading, setLoading] = useState<boolean>(false);
 
     const validateFirstName = async () => {

@@ -7,6 +7,7 @@ import { MenuBlockProps } from '../Types/MenuBlockProps';
 const MenuBlock: React.FC<MenuBlockProps> = ({
     handleCloseMenuBtn,
     handleOpenDoctorWindow,
+    handleOpenOfficeWindow,
 }) => {
     return (
         <div className="menu-block">
@@ -23,6 +24,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
             </Button>
             <Button 
                 variant="text" 
+                onClick={handleOpenOfficeWindow}
             >
                 See All Offices
             </Button>
