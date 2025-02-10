@@ -13,6 +13,7 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     filteredDoctorList,
     setFilteredDoctorList,
     officeList,
+    handleOpenCreateDoctorWindow
 }) => {
     const [filterFirstName, setFilterFirstName] = useState<string>('');
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
@@ -84,6 +85,7 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
                 </Select>
             </FormControl>
             <Button variant="text" onClick={handleApplyBtn}>Apply</Button>
+            <Button variant="text" onClick={handleOpenCreateDoctorWindow}>Create Doctor</Button>
         </div>
     );
 }

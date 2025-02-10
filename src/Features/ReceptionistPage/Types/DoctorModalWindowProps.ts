@@ -6,4 +6,5 @@ export interface DoctorModalWindowProps {
     doctorList: Doctor[];
     officeList: Office[];
     isLoading: boolean;
+    handleOpenCreateDoctorWindow: () => void;
 }

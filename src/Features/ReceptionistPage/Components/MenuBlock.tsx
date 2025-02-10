@@ -6,7 +6,6 @@ import { MenuBlockProps } from '../Types/MenuBlockProps';
 
 const MenuBlock: React.FC<MenuBlockProps> = ({
     handleCloseMenuBtn,
-    handleOpenCreateDoctorWindow,
     handleOpenDoctorWindow,
 }) => {
     return (
@@ -18,15 +17,14 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
             </Button>
             <Button 
                 variant="text"
-                onClick={handleOpenCreateDoctorWindow} 
-            >
-                Create Doctor
-            </Button>
-            <Button 
-                variant="text"
                 onClick={handleOpenDoctorWindow} 
             >
                 See All Doctors
+            </Button>
+            <Button 
+                variant="text" 
+            >
+                See All Offices
             </Button>
             <button 
                 className="close-button"

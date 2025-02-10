@@ -6,4 +6,5 @@ export interface DoctorFiltersContainerProps {
     filteredDoctorList: Doctor[];
     setFilteredDoctorList: (doctors: Doctor[]) => void;
     officeList: Office[];
+    handleOpenCreateDoctorWindow: () => void;
 }

@@ -29,6 +29,7 @@ const ReceptionistPage: React.FC = () => {
 
     const handleOpenCreateDoctorWindow = () => {
         setIsCreateDoctorWindowOpened(true);
+        setIsDoctorWindowOpened(false)
     }
 
     const handleCloseCreateDoctorWindow = () => {
@@ -46,7 +47,7 @@ const ReceptionistPage: React.FC = () => {
             setDoctorList(doctors);
             setOfficeList(offices);
         } catch (error) {
-            console.error("Ошибка загрузки данных:", error);
+            console.error("Error with loading data", error);
         } finally {
             setIsLoading(false); 
         }
@@ -61,7 +62,6 @@ const ReceptionistPage: React.FC = () => {
     return (
         <div>
             <MenuContainer 
-                handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow} 
                 handleOpenDoctorWindow={handleOpenDoctorWindow}
             />
             {isCreateDoctorWindowOpened && 
@@ -75,6 +75,7 @@ const ReceptionistPage: React.FC = () => {
                     doctorList={doctorList}
                     officeList={officeList}
                     isLoading={isLoading}
+                    handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
                 />
             }
         </div>

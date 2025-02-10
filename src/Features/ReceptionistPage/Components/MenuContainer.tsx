@@ -5,7 +5,6 @@ import MenuButton from "./MenuButton.tsx";
 import { MenuContainerProps } from "../Types/MenuContainerProps.ts";
 
 const MenuContainer: React.FC<MenuContainerProps> = ({
-    handleOpenCreateDoctorWindow,
     handleOpenDoctorWindow,
 }) => {
     const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
@@ -23,7 +22,6 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
             {isMenuOpened ? 
                 <MenuBlock 
                     handleCloseMenuBtn={handleCloseMenuBtn}
-                    handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow} 
                     handleOpenDoctorWindow={handleOpenDoctorWindow}
                 />
                 :
