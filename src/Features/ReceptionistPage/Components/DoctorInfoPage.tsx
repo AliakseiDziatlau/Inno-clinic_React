@@ -228,7 +228,7 @@ const DoctorInfoPage: React.FC = () => {
             <div className="edit-button">
                 <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
             </div>
-            <h1>Create Doctor</h1>
+            <h1>Doctor Information</h1>
             <div className="inline-container">
                 <SimpleDataInput 
                     title="First Name"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { OfficeModalWindowProps } from '../Types/OfficeModalWindowProps';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import '../Styles/OfficeModalWindow.css';
+import { Office } from '../../UserPage/Types/Office.ts';
+import config from '../../../Configurations/Config.ts';
 
 const OfficeModalWindow: React.FC<OfficeModalWindowProps> = ({
     officeList,
@@ -18,6 +21,11 @@ const OfficeModalWindow: React.FC<OfficeModalWindowProps> = ({
     handleCloseOfficeWindow,
     handleOpenCreateOfficeWindow,
 }) => {
+    const navigate = useNavigate();
+
+    const handleOfficeRowClick = (office: Office) => {
+        navigate(config.ReceptionistPageChangeOfficeUrl, { state: { office } } );
+    }
 
     return (
         <div className="modal-overlay">
@@ -57,6 +65,7 @@ const OfficeModalWindow: React.FC<OfficeModalWindowProps> = ({
                                 {officeList.map((office) => (
                                     <TableRow
                                     key={office.id}
+                                    onClick={() => handleOfficeRowClick(office)}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell>{office.address}</TableCell>

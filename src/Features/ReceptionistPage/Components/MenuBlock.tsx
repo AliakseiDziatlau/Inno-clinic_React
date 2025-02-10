@@ -8,6 +8,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
     handleCloseMenuBtn,
     handleOpenDoctorWindow,
     handleOpenOfficeWindow,
+    handleOpenPatientModalWindow,
 }) => {
     return (
         <div className="menu-block">
@@ -21,6 +22,12 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
                 onClick={handleOpenDoctorWindow} 
             >
                 See All Doctors
+            </Button>
+            <Button 
+                variant="text"
+                onClick={handleOpenPatientModalWindow} 
+            >
+                See All Patients
             </Button>
             <Button 
                 variant="text" 
