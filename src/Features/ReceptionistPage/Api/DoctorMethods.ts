@@ -72,3 +72,53 @@ export const createDoctorProfile = async (
         return false;
     }
 };
+
+export const updateDoctor = async (
+    id: number,
+    firstName: string,
+    lastName: string,
+    middleName: string,
+    phoneNumber: string,
+    email: string,
+    dateOfBirth: string, 
+    officeId: string,
+    careerStartYear: number,
+    status: string
+): Promise<boolean> => {
+    try {
+        const response = await fetch(`${config.ProfilesServiceGetAllDoctorsUrl}${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                middleName,
+                phoneNumber,
+                email,
+                dateOfBirth,
+                officeId,
+                careerStartYear,
+                status
+            }),
+        });
+
+        if (response.status === 204) {
+            console.log(`Doctor with ${id} successfully updated`);
+            return true;
+        }
+
+        if (response.status === 404) {
+            const errorData = await response.json();
+            console.error(`Error: ${errorData.message}`);
+            return false;
+        }
+
+        throw new Error("Undefined error");
+    } catch (error) {
+        console.error("Update error", error);
+        return false;
+    }
+};

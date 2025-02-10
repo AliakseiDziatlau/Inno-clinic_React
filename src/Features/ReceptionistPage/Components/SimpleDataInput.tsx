@@ -8,6 +8,7 @@ const SimpleDataInput: React.FC<SimpleDataInputProps> = ({
     isTouched,
     error,
     type,
+    disabled,
     handleChange,
     handleBlur,
 }) => {

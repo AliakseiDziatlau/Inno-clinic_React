@@ -243,6 +243,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isFirstNameTouched}
                             error={firstNameError}
                             type="text"
+                            disabled={false}
                             handleChange={handleFirstNameChange}
                             handleBlur={validateFirstName}
                         />
@@ -252,6 +253,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isLastNameTouched}
                             error={lastNameError}
                             type="text"
+                            disabled={false}
                             handleChange={handleLastNameChange}
                             handleBlur={validateLastName}
                         />
@@ -261,6 +263,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isMiddleNameTouched}
                             error={middleNameError}
                             type="text"
+                            disabled={false}
                             handleChange={handleMiddleNameChange}
                             handleBlur={validateMiddleName}
                         />
@@ -272,6 +275,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isDateOfBirthTouched}
                             error={dateOfBirthError}
                             type="date"
+                            disabled={false}
                             handleChange={handleDateOfBirthChange}
                             handleBlur={validateDateOfBirth}
                         />
@@ -281,6 +285,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isEmailTouched}
                             error={emailError}
                             type="text"
+                            disabled={false}
                             handleChange={handleEmailChange}
                             handleBlur={validateEmail}
                         />
@@ -290,6 +295,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isOfficeTouched}
                             error={officeError}
                             type="text"
+                            disabled={false}
                             handleChange={handleOfficeChange}
                             handleBlur={validateOffice}
                         />
@@ -301,6 +307,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isStartYearTouched}
                             error={startYearError}
                             type="text"
+                            disabled={false}
                             handleChange={handleStartYearChange}
                             handleBlur={validateStartYear}
                         />
@@ -310,6 +317,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isStatusTouched}
                             error={statusError}
                             type="text"
+                            disabled={false}
                             handleChange={handleStatusChange}
                             handleBlur={validateStatus}
                         />
@@ -319,6 +327,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             isTouched={isPhoneNumberTouched}
                             error={phoneNumberError}
                             type="text"
+                            disabled={false}
                             handleChange={handlePhoneNumberChange}
                             handleBlur={validatePhoneNumber}
                         />

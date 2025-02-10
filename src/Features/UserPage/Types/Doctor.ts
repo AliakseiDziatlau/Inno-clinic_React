@@ -11,4 +11,5 @@ export interface Doctor {
     officeId: string;
     careerStartYear: number;
     status: string;
+    photoId?: string;
 }

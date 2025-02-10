@@ -10,7 +10,7 @@ import OfficesMap from './OfficesMap.tsx';
 const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,
     doctorsList,
-    filterOffice
+    filterOffice,
 }) => {
     const [filteredDoctorsList, setFilteredDoctorsList] = useState<Doctor[]>(doctorsList);
 
@@ -30,7 +30,7 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
                         setFilteredDoctorsList={setFilteredDoctorsList}
                         filterOfficeFromMap={filterOffice}
                     />
-                     <DoctorCardsContainer filteredDoctorsList={filteredDoctorsList} />
+                    <DoctorCardsContainer filteredDoctorsList={filteredDoctorsList} />
                 </div>
             </div>
         </div>

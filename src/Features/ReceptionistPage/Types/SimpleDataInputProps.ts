@@ -4,6 +4,7 @@ export interface SimpleDataInputProps {
     isTouched: boolean;
     error: string;
     type: string;
+    disabled: boolean;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleBlur: () => void;
 }

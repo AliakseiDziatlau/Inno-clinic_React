@@ -1,0 +1,16 @@
+.create-doctor-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    height: 100vh;
+    text-align: center;
+}
+
+.edit-button {
+    position: absolute; 
+    top: 16px; 
+    right: 16px; 
+    z-index: 1000; 
+}
