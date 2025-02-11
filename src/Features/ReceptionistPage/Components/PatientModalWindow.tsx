@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PatientModalWindowProps } from '../Types/PatientModalWindowProps.ts';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -11,13 +13,60 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import '../Styles/PatientModalWindow.css'
+import '../Styles/PatientModalWindow.css';
+import FilterPatientsModalWindow from './FilterPatientsModalWindow.tsx';
+import { Patient } from '../../../Interfaces/Patient.ts';
+import config from '../../../Configurations/Config.ts';
 
 const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     patientList,
     isLoading,
     handleClosePatientModalWindow,
+    handleOpenCreatePatientWindow,
 }) => {
+    const navigate = useNavigate();
+
+    const [isFilterWindowOpened, setIsFilterWindowOpened] = useState<boolean>(false);
+    const [filterPatientList, setFilterPatientList] = useState<Patient[]>(patientList);
+    const [filterFirstName, setFilterFirstName] = useState<string>('');
+    const [filterMiddleName, setFilterMiddleName] = useState<string>('');
+    const [filterLastName, setFilterLastName] = useState<string>('');
+    const [filterPhoneNumber, setFilterPhoneNumber] = useState<string>('');
+
+    const handleOpenFiltersBtn = () => {
+        setIsFilterWindowOpened(true);
+    }
+
+    const handleCloseFiltersBtn = () => {
+        setIsFilterWindowOpened(false);
+    }
+
+    const handleApplyBtn = (e: React.MouseEvent<HTMLButtonElement> ) => {
+        e.preventDefault();
+        setFilterPatientList(patientList);
+        if (filterFirstName !== '') {
+            setFilterPatientList(filterPatientList.filter((patient) => patient.firstName.toLowerCase().includes(filterFirstName.toLowerCase())));
+        }
+        if (filterMiddleName !== '') {
+            setFilterPatientList(filterPatientList.filter((patient) => patient.middleName.toLowerCase().includes(filterMiddleName.toLowerCase())));
+        }
+        if (filterLastName !== '') {
+            setFilterPatientList(filterPatientList.filter((patient) => patient.lastName.toLowerCase().includes(filterLastName.toLowerCase())));
+        }
+        if (filterPhoneNumber !== '') {
+            setFilterPatientList(filterPatientList.filter((patient) => patient.phoneNumber.toLowerCase().includes(filterPhoneNumber.toLowerCase())));
+        }
+    }
+
+    const handlePatientRowClick = (patient: Patient) => {
+        navigate(config.ReceptionistPageChangePatientUrl, { state: { patient }});
+    }
+
+    useEffect(() => {
+        setFilterPatientList(patientList);
+    }, [patientList]);
+
+
     return (
         <div className="modal-overlay">
             <div className="modal-window">
@@ -35,10 +84,10 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                 ) : (
                     <div>
                         <div className="create-patient-button">
-                            <Button>Create Patient</Button>
+                            <Button onClick={handleOpenCreatePatientWindow}>Create Patient</Button>
                         </div>
                         <div className="filter-patient-button">
-                            <Button>Filter Patients</Button>
+                            <Button onClick={handleOpenFiltersBtn}>Filter Patients</Button>
                         </div>
                         <button 
                             className="close-button"
@@ -57,10 +106,10 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                            {patientList.map((patient) => (
+                            {filterPatientList.map((patient) => (
                                 <TableRow
                                 key={patient.id}
-                            
+                                onClick={() => handlePatientRowClick(patient)}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell>{patient.firstName}</TableCell>
@@ -75,6 +124,20 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    {isFilterWindowOpened && 
+                        <FilterPatientsModalWindow
+                            filterFirstName={filterFirstName}
+                            filterLastName={filterLastName}
+                            filterMiddleName={filterMiddleName}
+                            filterPhoneNumber={filterPhoneNumber}
+                            setFilterFirstName={setFilterFirstName}
+                            setFilterLastName={setFilterLastName}
+                            setFilterMiddleName={setFilterMiddleName}
+                            setFilterPhoneNumber={setFilterPhoneNumber}
+                            handleApplyBtn={handleApplyBtn}
+                            handleCloseFiltersBtn={handleCloseFiltersBtn}
+                        />
+                    }
                 </div>
                 )}
             </div>

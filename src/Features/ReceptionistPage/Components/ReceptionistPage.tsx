@@ -13,6 +13,7 @@ import CreateOfficeWindow from './CreateOfficeWindow.tsx';
 import PatientModalWindow from './PatientModalWindow.tsx';
 import { getAllPatients } from '../Api/PatientsMethods.ts';
 import { Patient } from '../../../Interfaces/Patient.ts';
+import CreatePatientWindow from './CreatePatientWindow.tsx';
 
 const ReceptionistPage: React.FC = () => {
     const location = useLocation();
@@ -21,6 +22,7 @@ const ReceptionistPage: React.FC = () => {
     const [isOfficeWindowOpened, setIsOfficeWindowOpened] = useState<boolean>(false);
     const [isPatientWindowOpened, setIsPatientWindowOpened] = useState<boolean>(false);
     const [isCreateOfficeWindowOpened, setIsCreateOfficeWindowOpened] = useState<boolean>(false);
+    const [isCreatePatientWindowOpened, setIsCreatePatientWindowOpened] = useState<boolean>(false);
     const [doctorList, setDoctorList] = useState<Doctor[]>([]);
     const [officeList, setOfficeList] = useState<Office[]>([]);
     const [patientList, setPatientList] = useState<Patient[]>([]);
@@ -37,12 +39,19 @@ const ReceptionistPage: React.FC = () => {
 
         const openOfficeWindow = async () => {
             if (location.state?.isOfficeWindowOpened) {
-                await handleOpenOfficeWindow; 
+                await handleOpenOfficeWindow(); 
+            }
+        };
+
+        const openPatientWindow = async () => {
+            if (location.state?.isPatientWindowOpened) {
+                await handleOpenPatientModalWindow(); 
             }
         };
     
         openDoctorWindow(); 
         openOfficeWindow();
+        openPatientWindow();
     }, [location.state]);
 
     const handleOpenCreateDoctorWindow = () => {
@@ -121,6 +130,14 @@ const ReceptionistPage: React.FC = () => {
         setIsPatientWindowOpened(false);
     }
 
+    const handleCloseCreatePatientModalWindow = () => {
+        setIsCreatePatientWindowOpened(false);
+    }
+
+    const handleOpenCreatePatientWindow = () => {
+        setIsCreatePatientWindowOpened(true);
+    }
+
     return (
         <div>
             <MenuContainer 
@@ -160,6 +177,12 @@ const ReceptionistPage: React.FC = () => {
                     patientList={patientList}
                     isLoading={isLoadingPatients}
                     handleClosePatientModalWindow={handleClosePatientModalWindow}
+                    handleOpenCreatePatientWindow={handleOpenCreatePatientWindow}
+                />
+            }
+            {isCreatePatientWindowOpened &&
+                <CreatePatientWindow 
+                    handleCloseCreatePatientModalWindow={handleCloseCreatePatientModalWindow}
                 />
             }
         </div>

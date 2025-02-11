@@ -4,4 +4,5 @@ export interface PatientModalWindowProps {
     patientList: Patient[];
     isLoading: boolean;
     handleClosePatientModalWindow: () => void;
+    handleOpenCreatePatientWindow: () => void;
 }

@@ -19,6 +19,7 @@ const config = {
     ReceptionistPageProfileUrl: "/receptionist-page/profile",
     ReceptionistPageChangeDoctorUrl: "/receptionist-page/change-doctor",
     ReceptionistPageChangeOfficeUrl: "/receptionist-page/change-office",
+    ReceptionistPageChangePatientUrl: "/receptionist-page/change-patient",
 }
 
 export default config;
