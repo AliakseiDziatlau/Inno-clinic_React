@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import '../Styles/PatientModalWindow.css';
 import { FilterPatientsModalWindowProps } from '../Types/FilterPatientsModalWindowProps.ts';

@@ -8,29 +8,47 @@ import { Doctor } from '../Types/Doctor.ts';
 import MenuContainer from './MenuContainer.tsx';
 import { useLocation } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-import { useUser } from '../../../Contexts/UserContext.tsx';
+import { Patient } from '../../../Interfaces/Patient.ts';
+import { getAllPatients } from '../../ReceptionistPage/Api/PatientsMethods.ts';
 
 const UserPage: React.FC = () => {
     const location = useLocation();
-    const { currUser, fetchUser } = useUser();
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
     const [doctorsList, setDoctorsList] = useState<Doctor[]>([]);
     const [filterOffice, setFilterOffice] = useState<string>("");
-    const email = location.state?.email;
+    const [email, setEmail] = useState<string>(() => {
+        return location.state?.email || localStorage.getItem("email") || "";
+    });
 
     useEffect(() => {
-        if(email && !currUser) {
-            fetchUser(email);
+        if (email) {
+            localStorage.setItem("email", email); 
+            const fetchAndStorePatient = async () => {
+                try {
+                    const patients: Patient[] = await getAllPatients();
+                    const patient = patients.find((p) => p.email === email); 
+    
+                    if (patient) {
+                        localStorage.setItem("patient", JSON.stringify(patient));
+                        console.log("Patient saved in localStorage:", patient);
+                    } else {
+                        console.warn("Patient not found for email:", email);
+                    }
+                } catch (error) {
+                    console.error("Error fetching patient:", error);
+                }
+            };
+    
+            fetchAndStorePatient(); 
         }
-
-        if(location.state?.openModal) {
+    
+        if (location.state?.openModal) {
             setIsDoctorWindowOpened(true);
         }
-
-        if(location.state?.selectedOffice) {
+    
+        if (location.state?.selectedOffice) {
             setFilterOffice(location.state.selectedOffice);
         }
-
     }, [location.state, email]);
 
     const handleOurDoctorsBtn = async() => {
@@ -46,7 +64,7 @@ const UserPage: React.FC = () => {
     return (
         <div className="user-container">
             <GreetingComponent />
-            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} currUser={currUser}/>
+            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
             {isDoctorWindowOpened && <DoctorsModalWindow
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
                 doctorsList={doctorsList}

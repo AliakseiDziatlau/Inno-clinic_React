@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from 'react';
 import { CreateDoctorWindowProps } from "../Types/CreateDoctorWindowProps";
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import '../Styles/CreateDoctorWindow.css';
@@ -10,9 +9,6 @@ import SimpleDataInput from "./SimpleDataInput.tsx";
 import { registerDoctor, createDoctorProfile } from '../Api/DoctorMethods.ts';
 import { getOffices } from "../../UserPage/Api/OfficeMethod.ts";
 import { Office } from "../../UserPage/Types/Office.ts";
-import { Box } from "@mui/material";
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
 
 
 const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
@@ -50,7 +46,7 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
     const [isStartYearTouched, setIsStartYearTouched] = useState<boolean>(false);
     const [isStatusTouched, setIsStatusTouched] = useState<boolean>(false);
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
-    
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const validateFirstName = async () => {

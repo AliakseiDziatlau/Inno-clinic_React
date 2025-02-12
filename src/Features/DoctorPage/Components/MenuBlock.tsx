@@ -5,7 +5,7 @@ import { useAuth } from '../../../Contexts/AuthContext.tsx';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../Configurations/Config.ts';
 import { MenuBlockProps } from '../Types/MenuBlockProps.ts';
-
+import { Doctor } from '../../UserPage/Types/Doctor.ts';
 
 const MenuBlock: React.FC<MenuBlockProps> = ({
     handleCloseMenuBtn,
@@ -18,6 +18,18 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
         await logout(setAccessToken);
         navigate(config.LoginPageUrl);
     }
+
+    const handleOpenDoctorInfoWindow = async () => {
+        const storedDoctor = localStorage.getItem("doctor");
+        const doctor: Doctor | null = storedDoctor ? JSON.parse(storedDoctor) : null;
+    
+        if (!doctor) {
+            console.warn("Doctor not found in localStorage");
+            return; 
+        }
+    
+        navigate(config.ReceptionistPageChangeDoctorUrl, { state: { doctor, isReceptionist: false } });
+    };
 
     return (
         <div className="menu-block">
@@ -32,6 +44,12 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
                 onClick={handleOpenPatientWindow} 
             >
                 See All Patients
+            </Button>
+            <Button 
+                variant="text"
+                onClick={handleOpenDoctorInfoWindow} 
+            >
+                My account
             </Button>
             <button 
                 className="close-button"

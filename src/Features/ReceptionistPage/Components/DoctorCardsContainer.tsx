@@ -11,7 +11,7 @@ const DoctorCardsContainer: React.FC<DoctorCardsContainerProps> = ({
     const navigate = useNavigate();
 
     const handleDoctorImageClick = (doctor: Doctor) => {
-        navigate(config.ReceptionistPageChangeDoctorUrl, { state: { doctor } });
+        navigate(config.ReceptionistPageChangeDoctorUrl, { state: { doctor, isReceptionist: true } });
     }
 
     return (

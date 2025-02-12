@@ -8,7 +8,6 @@ import config from '../../../Configurations/Config.ts';
 import { updateUser } from '../Api/UpdateAuthUser.ts';
 import { updatePatient } from '../Api/PatientsMethods.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
-import { Email } from '@mui/icons-material';
 
 const PatientInfoPage: React.FC = () => {
     const navigate = useNavigate();

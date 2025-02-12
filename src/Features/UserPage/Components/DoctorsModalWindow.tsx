@@ -5,7 +5,6 @@ import '../Styles/DoctorsModalWindow.css';
 import { DoctorsModalWindowProps } from '../Types/DoctorsModalWindowProps';
 import DoctorCardsContainer from './DoctorsCardsContainer.tsx';
 import DoctorFiltersContainer from './DoctorFiltersContainer.tsx';
-import OfficesMap from './OfficesMap.tsx';
 
 const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,

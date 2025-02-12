@@ -10,7 +10,6 @@ import { useAuth } from '../../../Contexts/AuthContext.tsx';
 import { createReceptionist } from '../Api/ReceptionistMethods.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
-import { create } from '@mui/material/styles/createTransitions';
 
 const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
     handleCloseCreateReceptionistWindow,

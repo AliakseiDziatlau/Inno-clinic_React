@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import SimpleDataInput from './SimpleDataInput.tsx';
 import { Button, ButtonGroup } from '@mui/material';
@@ -15,7 +15,8 @@ import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
 const DoctorInfoPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const doctor: Doctor  = location.state?.doctor;
+    const doctor: Doctor = location.state?.doctor;
+    const isReceptionist: boolean = location.state?.isReceptionist;
 
     const [currFirstName, setCurrFirstName] = useState<string>(doctor.firstName);
     const [currLastName, setCurrLastName] = useState<string>(doctor.lastName);
@@ -217,7 +218,11 @@ const DoctorInfoPage: React.FC = () => {
     }
 
     const handleCloseBtn = () => {
-        navigate(config.ReceptionistPageUrl, { state: { isDoctorWindowOpened: true } });
+        if (isReceptionist) {
+            navigate(config.ReceptionistPageUrl, { state: { isDoctorWindowOpened: true } });
+        } else {
+            navigate(config.DoctorPageUrl);
+        }
     }
 
     const handleConfirmBtn = async () => {

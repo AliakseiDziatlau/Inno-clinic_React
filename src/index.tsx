@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
-import { UserProvider } from './Contexts/UserContext.tsx';
 import { AuthProvider } from './Contexts/AuthContext.tsx';
 
 const root = ReactDOM.createRoot(
@@ -10,9 +9,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <AuthProvider>
-    <UserProvider>
       <App />
-    </UserProvider>
   </AuthProvider>
 );
 

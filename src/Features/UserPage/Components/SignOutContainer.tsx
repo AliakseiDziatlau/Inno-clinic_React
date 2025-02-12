@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import React from 'react';
 import Button from '@mui/material/Button';
@@ -7,7 +6,6 @@ import { logout } from '../../Auth/Api/Auth.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const SignOutContainer: React.FC = () => {
-    const navigate = useNavigate();
     const { setAccessToken } = useAuth();
     
     const handleSignOutButton = async () => {
