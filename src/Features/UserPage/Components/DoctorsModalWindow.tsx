@@ -10,6 +10,8 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
     closeDoctorsModalWindow,
     doctorsList,
     filterOffice,
+    officeList,
+    isLoading,
 }) => {
     const [filteredDoctorsList, setFilteredDoctorsList] = useState<Doctor[]>(doctorsList);
 
@@ -28,6 +30,8 @@ const DoctorsModalWindow: React.FC<DoctorsModalWindowProps> = ({
                         filteredDoctorList={filteredDoctorsList} 
                         setFilteredDoctorsList={setFilteredDoctorsList}
                         filterOfficeFromMap={filterOffice}
+                        officeList={officeList}
+                        isLoading={isLoading}
                     />
                     <DoctorCardsContainer filteredDoctorsList={filteredDoctorsList} />
                 </div>

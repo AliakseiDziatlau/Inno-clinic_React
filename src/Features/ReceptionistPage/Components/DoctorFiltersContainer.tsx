@@ -35,7 +35,7 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
         if (filterOffice !== '') {
             const office: Office | undefined = officeList.find((office) => office.address === filterOffice);
 
-            setFilteredDoctorList(filteredDoctorList.filter((doctor) => doctor.officeId === office?.id))
+            setFilteredDoctorList(filteredDoctorList.filter((doctor) => doctor.officeId === office?.id));
         }
     }
 

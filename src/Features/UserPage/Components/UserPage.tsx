@@ -10,12 +10,16 @@ import { useLocation } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import { Patient } from '../../../Interfaces/Patient.ts';
 import { getAllPatients } from '../../ReceptionistPage/Api/PatientsMethods.ts';
+import { getOffices } from '../Api/OfficeMethod.ts';
+import { Office } from '../Types/Office.ts';
 
 const UserPage: React.FC = () => {
     const location = useLocation();
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
-    const [doctorsList, setDoctorsList] = useState<Doctor[]>([]);
+    const [doctorList, setDoctorList] = useState<Doctor[]>([]);
+    const [officeList, setOfficeList] = useState<Office[]>([]);
     const [filterOffice, setFilterOffice] = useState<string>("");
+    const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(false);
     const [email, setEmail] = useState<string>(() => {
         return location.state?.email || localStorage.getItem("email") || "";
     });
@@ -52,8 +56,20 @@ const UserPage: React.FC = () => {
     }, [location.state, email]);
 
     const handleOurDoctorsBtn = async() => {
-        setDoctorsList(await getDoctorsList());
-        setIsDoctorWindowOpened(true);
+        setIsDoctorWindowOpened(true); 
+        setIsLoadingDoctors(true); 
+
+        try {
+            const doctors = await getDoctorsList();
+            const offices = await getOffices();
+
+            setDoctorList(doctors);
+            setOfficeList(offices);
+        } catch (error) {
+            console.error("Error with loading data", error);
+        } finally {
+            setIsLoadingDoctors(false); 
+        }
     }
 
     const closeDoctorsModalWindow = () => {
@@ -67,8 +83,10 @@ const UserPage: React.FC = () => {
             <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
             {isDoctorWindowOpened && <DoctorsModalWindow
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
-                doctorsList={doctorsList}
-                filterOffice={filterOffice}            
+                doctorsList={doctorList}
+                filterOffice={filterOffice}
+                officeList={officeList}   
+                isLoading={isLoadingDoctors}         
             />}
         </div>
     );

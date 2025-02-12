@@ -6,12 +6,15 @@ import '../Styles/DoctorFiltersContainer.css';
 import Button from '@mui/material/Button';
 import { DoctorFiltersContainerProps } from '../Types/DoctorFiltersContainerProps';
 import config from '../../../Configurations/Config.ts';
+import { Office } from '../Types/Office.ts';
 
 const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     doctorList,
     filteredDoctorList,
     setFilteredDoctorsList,
-    filterOfficeFromMap
+    filterOfficeFromMap,
+    officeList,
+    isLoading,
 }) => {
     const [filterFirstName, setFilterFirstName] = useState<string>('');
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
@@ -37,7 +40,9 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
             setFilteredDoctorsList(filteredDoctorList.filter((doctor) => doctor.lastName.toLowerCase().includes(filterLastName.toLowerCase())));
         }
         if(filterOffice !== '') {
-            setFilteredDoctorsList(filteredDoctorList.filter((doctor) => doctor.officeId.toLowerCase().includes(filterOffice.toLowerCase())));
+            const office: Office | undefined = officeList.find((office) => office.address === filterOffice);
+
+            setFilteredDoctorsList(filteredDoctorList.filter((doctor) => doctor.officeId === office?.id))
         }
     }
 
