@@ -3,4 +3,5 @@ export interface MenuBlockProps {
     handleOpenDoctorWindow: () => void;
     handleOpenOfficeWindow: () => void;
     handleOpenPatientModalWindow: () => void;
+    handleOpenReceptionistWindow: () => void; 
 }

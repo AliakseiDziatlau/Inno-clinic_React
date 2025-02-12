@@ -1,46 +1,58 @@
 import React from 'react';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import SimpleDataInput from './SimpleDataInput.tsx';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; 
+import { useState, useEffect } from 'react';
+import { Receptionist } from '../../../Interfaces/Receptionist.ts';
 import { Button, ButtonGroup } from '@mui/material';
-import { Patient } from '../../../Interfaces/Patient.ts';
 import config from '../../../Configurations/Config.ts';
-import { updateUser } from '../Api/UpdateAuthUser.ts';
-import { updatePatient } from '../Api/PatientsMethods.ts';
+import SimpleDataInput from './SimpleDataInput.tsx';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
-import { Email } from '@mui/icons-material';
+import { updateUser } from '../Api/UpdateAuthUser.ts';
+import { updateReceptionist } from '../Api/ReceptionistMethods.ts';
+import { Office } from '../../UserPage/Types/Office.ts';
+import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
 
-const PatientInfoPage: React.FC = () => {
+const ReceptionistInfoPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { accessToken } = useAuth();
-    const currPatient: Patient = location.state?.patient;
-
-    const [currFirstName, setCurrFirstName] = useState<string>(currPatient.firstName);
-    const [currLastName, setCurrLastName] = useState<string>(currPatient.lastName);
-    const [currMiddleName, setCurrMiddleName] = useState<string>(currPatient.middleName);
-    const [currDateOfBirth, setCurrDateOfBirth] = useState<string>(currPatient.dateOfBirth);
-    const [currPhoneNumber, setCurrPhoneNumber] = useState<string>(currPatient.phoneNumber);
+    const currReceptionist: Receptionist = location.state?.receptionist;
+    
+    const [currFirstName, setCurrFirstName] = useState<string>('');
+    const [currLastName, setCurrLastName] = useState<string>('');
+    const [currMiddleName, setCurrMiddleName] = useState<string>('');
+    const [currOffice, setCurrOffice] = useState<string>('');
+    const [currPhoneNumber, setCurrPhoneNumber] = useState<string>('');    
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [middleName, setMiddleName] = useState<string>('');
-    const [dateOfBirth, setDateOfBirth] = useState<string>('');
+    const [office, setOffice] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
 
     const [firstNameError, setFirstNameError] = useState<string>('');
     const [lastNameError, setLastNameError] = useState<string>('');
     const [middleNameError, setMiddleNameError] = useState<string>('');
-    const [dateOfBirthError, setDateOfBirthError] = useState<string>('');
+    const [officeError, setOfficeError] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
 
     const [isFirstNameTouched, setIsFirstNameTouched] = useState<boolean>(false);
     const [isLastNameTouched, setIsLastNameTouched] = useState<boolean>(false);
     const [isMiddleNameTouched, setIsMiddleNameTouched] = useState<boolean>(false);
-    const [isDateOfBirthTouched, setIsDateOfBirthTouched] = useState<boolean>(false);
+    const [isOfficeTouched, setIsOfficeTouched] = useState<boolean>(false);
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
 
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (currReceptionist) {
+            setCurrFirstName(currReceptionist.firstName);
+            setCurrLastName(currReceptionist.lastName);
+            setCurrMiddleName(currReceptionist.middleName);
+            setCurrOffice(currReceptionist.officeId);
+            setCurrPhoneNumber(currReceptionist.phoneNumber);
+        }
+    }, [currReceptionist]);
 
     const validateFirstName = async () => {
         if (!isEditMode) return;
@@ -69,30 +81,21 @@ const PatientInfoPage: React.FC = () => {
         } 
     };
 
-    const validateDateOfBirth = async () => {
-        if (!isEditMode) return;
-        setIsDateOfBirthTouched(true);
-
-        if (!dateOfBirth) {
-            setDateOfBirthError("Please, enter the date of birth");
-        } else {
-            const selectedDate = new Date(dateOfBirth);
-            const currentDate = new Date();
-
-            if (selectedDate > currentDate) {
-                setDateOfBirthError("Date of birth cannot be in the future.");
-            } else {
-                setDateOfBirthError("");
-            }
-        }
-    };
-
     const validatePhoneNumber = async () => {
         if (!isEditMode) return;
         setIsPhoneNumberTouched(true);
 
         if (!phoneNumber) {
             setPhoneNumberError("Please, enter the phone number");
+        } 
+    };
+
+    const validateOffice = async () => {
+        if (!isEditMode) return;
+        setIsOfficeTouched(true);
+
+        if (!office) {
+            setOfficeError("Please, enter the office");
         } 
     };
 
@@ -111,14 +114,14 @@ const PatientInfoPage: React.FC = () => {
         if (middleNameError) setMiddleNameError("");
     }
 
-    const handleDateOfBirthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDateOfBirth(e.target.value);
-        if (dateOfBirthError) setDateOfBirthError("");
-    }
-
     const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPhoneNumber(e.target.value);
         if (phoneNumberError) setPhoneNumberError("");
+    }
+
+    const handleOfficeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setOffice(e.target.value);
+        if (officeError) setOfficeError("");
     }
 
     const handleEditBtn = () => {
@@ -126,7 +129,7 @@ const PatientInfoPage: React.FC = () => {
         setFirstName(currFirstName);
         setLastName(currLastName);
         setMiddleName(currMiddleName);
-        setDateOfBirth(currDateOfBirth);
+        setOffice(currOffice);
         setPhoneNumber(currPhoneNumber);
     }
 
@@ -135,14 +138,15 @@ const PatientInfoPage: React.FC = () => {
     }
 
     const handleConfirmBtn = async () => {
-        await updateUser(currPatient.email, currPatient.email, phoneNumber);
-        await updatePatient(accessToken, currPatient.id, firstName, lastName, middleName, phoneNumber, currPatient.email, dateOfBirth, true);
+        const offices: Office[] = await getOffices();
+        const off: Office | undefined = offices.find(off => off.address === office);        
+        await updateUser(currReceptionist.email, currReceptionist.email, phoneNumber);
+        await updateReceptionist(accessToken, currReceptionist.id, firstName, lastName, middleName, phoneNumber, currReceptionist.email, String(off?.id));
     }
 
     const handleCloseBtn = () => {
-        navigate(config.ReceptionistPageUrl, { state: { isPatientWindowOpened: true } })
+        navigate(config.ReceptionistPageUrl, { state: { isReceptionistWindowOpened: true } })
     }
-
 
     return (
         <div className="create-doctor-container">
@@ -195,13 +199,13 @@ const PatientInfoPage: React.FC = () => {
                 />
                 <SimpleDataInput 
                     title="Date Of Birth"
-                    value={isEditMode ? dateOfBirth : currDateOfBirth}
-                    isTouched={isDateOfBirthTouched}
-                    error={dateOfBirthError}
+                    value={isEditMode ? office : currOffice}
+                    isTouched={isOfficeTouched}
+                    error={officeError}
                     type="text"
                     disabled={!isEditMode}
-                    handleChange={handleDateOfBirthChange}
-                    handleBlur={validateDateOfBirth}
+                    handleChange={handleOfficeChange}
+                    handleBlur={validateOffice}
                 />
             </div>
             {isEditMode ? 
@@ -221,4 +225,4 @@ const PatientInfoPage: React.FC = () => {
     );
 }
 
-export default PatientInfoPage;
+export default ReceptionistInfoPage;

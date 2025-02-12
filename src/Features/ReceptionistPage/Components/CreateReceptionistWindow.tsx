@@ -4,38 +4,42 @@ import SimpleDataInput from './SimpleDataInput.tsx';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import CancelModalWindow from './CancelModalWindow.tsx';
-import { CreatePatientWindowProps } from '../Types/CreatePatientWindowProps.ts';
+import { CreateReceptionistWindowProps } from '../Types/CreateReceptionistWindowProps.ts';
+import { registerReceptionist } from '../Api/ReceptionistMethods.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
-import { createPatient } from '../Api/PatientsMethods.ts';
-import { registerPatient } from '../Api/PatientsMethods.ts';
+import { createReceptionist } from '../Api/ReceptionistMethods.ts';
+import { Office } from '../../UserPage/Types/Office.ts';
+import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
+import { create } from '@mui/material/styles/createTransitions';
 
-const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
-    handleCloseCreatePatientModalWindow
+const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
+    handleCloseCreateReceptionistWindow,
 }) => {
     const { accessToken } = useAuth();
+
     const [isCancelWindowOpened, setIsCancelWindowOpened] = useState<boolean>(false);
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [middleName, setMiddleName] = useState<string>('');
-    const [dateOfBirth, setDateOfBirth] = useState<string>('');
+    const [office, setOffice] = useState<string>('');
     const [email, setEmail] = useState<string>(''); 
     const [phoneNumber, setPhoneNumber] = useState<string>('');
-    
+
     const [firstNameError, setFirstNameError] = useState<string>('');
     const [lastNameError, setLastNameError] = useState<string>('');
     const [middleNameError, setMiddleNameError] = useState<string>('');
-    const [dateOfBirthError, setDateOfBirthError] = useState<string>('');
+    const [officeError, setOfficeError] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');   
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
-    
+
     const [isFirstNameTouched, setIsFirstNameTouched] = useState<boolean>(false);
     const [isLastNameTouched, setIsLastNameTouched] = useState<boolean>(false);
     const [isMiddleNameTouched, setIsMiddleNameTouched] = useState<boolean>(false);
-    const [isDateOfBirthTouched, setIsDateOfBirthTouched] = useState<boolean>(false);
+    const [isOfficeTouched, setIsOfficeTouched] = useState<boolean>(false);
     const [isEmailTouched, setIsEmailTouched] = useState<boolean>(false);
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
-    
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const validateFirstName = async () => {
@@ -62,23 +66,6 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
         } 
     };
 
-    const validateDateOfBirth = async () => {
-        setIsDateOfBirthTouched(true);
-
-        if (!dateOfBirth) {
-            setDateOfBirthError("Please, enter the date of birth");
-        } else {
-            const selectedDate = new Date(dateOfBirth);
-            const currentDate = new Date();
-
-            if (selectedDate > currentDate) {
-                setDateOfBirthError("Date of birth cannot be in the future.");
-            } else {
-                setDateOfBirthError("");
-            }
-        }
-    };
-
     const validatePhoneNumber = async () => {
         setIsPhoneNumberTouched(true);
 
@@ -97,12 +84,20 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
         } 
     };
 
+    const validateOffice = async () => {
+        setIsOfficeTouched(true);
+
+        if (!office) {
+            setOfficeError("Please, enter the office");
+        } 
+    };
+
     const isFormValid = (): boolean => {
         return [
             firstName,
             lastName,
             middleName,
-            dateOfBirth,
+            office,
             email,
             phoneNumber,
         ].every(field => !!field); 
@@ -128,9 +123,9 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
         if (emailError) setEmailError("");
     }
 
-    const handleDateOfBirthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDateOfBirth(e.target.value);
-        if (dateOfBirthError) setDateOfBirthError("");
+    const handleOfficeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setOffice(e.target.value);
+        if (officeError) setOfficeError("");
     }
 
     const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +139,7 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
 
     const handleYesOnCancelModalWindow = () => {
         setIsCancelWindowOpened(false);
-        handleCloseCreatePatientModalWindow();
+        handleCloseCreateReceptionistWindow();
     }
 
     const handleNoOnCancelModalWindow = () => {
@@ -152,14 +147,17 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
     } 
 
     const handleConfirmBtn = async () => {
-        await registerPatient(accessToken, email, "MyPassword", phoneNumber);
-        await createPatient(accessToken, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, true);
+        const offices: Office[] = await getOffices();
+        const off: Office | undefined = offices.find(off => off.address === office);
+
+        await registerReceptionist(accessToken, email, "MyPassword", phoneNumber);
+        await createReceptionist(accessToken, firstName, lastName, middleName, phoneNumber, email, String(off?.id));
     };
 
     return (
         <div className="modal-overlay">
             <div className="modal-window">
-                <h1>Create Patient</h1>
+                <h1>Create Receptionist</h1>
                 <div className="inline-container">
                     <SimpleDataInput 
                         title="First Name"
@@ -214,14 +212,14 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
                         handleBlur={validateEmail}
                     />
                     <SimpleDataInput 
-                        title="Date Of Birth"
-                        value={dateOfBirth}
-                        isTouched={isDateOfBirthTouched}
-                        error={dateOfBirthError}
+                        title="Office"
+                        value={office}
+                        isTouched={isOfficeTouched}
+                        error={officeError}
                         type="text"
                         disabled={false}
-                        handleChange={handleDateOfBirthChange}
-                        handleBlur={validateDateOfBirth}
+                        handleChange={handleOfficeChange}
+                        handleBlur={validateOffice}
                     />
                 </div>
                 <ButtonGroup 
@@ -242,4 +240,4 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
     );
 }
 
-export default CreatePatientWindow;
+export default CreateReceptionistWindow;

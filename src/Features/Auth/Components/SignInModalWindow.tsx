@@ -42,6 +42,7 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
             setAccessToken(loginResult.accessToken);
             setUserRole(loginResult.userRole);
             setRole(loginResult.userRole);
+            console.log(loginResult.accessToken);
         } else {
             setSignInError(true);
         }

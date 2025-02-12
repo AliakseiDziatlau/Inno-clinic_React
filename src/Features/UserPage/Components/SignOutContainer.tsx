@@ -14,10 +14,9 @@ const SignOutContainer: React.FC = () => {
         console.log("Кнопка Sign Out нажата");
         console.log("Перед logout, accessToken:", localStorage.getItem("accessToken"));
     
-        await logout(setAccessToken); // ✅ Ждем завершения logout
+        await logout(setAccessToken);
     
-        console.log("После logout, accessToken:", localStorage.getItem("accessToken")); // Должен быть null
-       // navigate('/');
+        console.log("После logout, accessToken:", localStorage.getItem("accessToken")); 
     
     }
 

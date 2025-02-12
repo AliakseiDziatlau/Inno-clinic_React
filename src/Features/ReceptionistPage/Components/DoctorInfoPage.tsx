@@ -9,6 +9,8 @@ import config from '../../../Configurations/Config.ts';
 import { Doctor } from '../../UserPage/Types/Doctor.ts';
 import { updateUser } from '../Api/UpdateAuthUser.ts';
 import { updateDoctor } from '../Api/DoctorMethods.ts';
+import { Office } from '../../UserPage/Types/Office.ts';
+import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
 
 const DoctorInfoPage: React.FC = () => {
     const navigate = useNavigate();
@@ -219,8 +221,10 @@ const DoctorInfoPage: React.FC = () => {
     }
 
     const handleConfirmBtn = async () => {
+        const offices: Office[] = await getOffices();
+        const off: Office | undefined = offices.find(off => off.address === office);         
         await updateUser(currEmail, email, phoneNumber);
-        await updateDoctor(doctor.id, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, office, Number(startYear), status);
+        await updateDoctor(doctor.id, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, String(off?.id), Number(startYear), status);
     }
 
     return (

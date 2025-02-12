@@ -1,18 +1,4 @@
-.create-patient-button {
-    position: absolute; 
-    top: 16px; 
-    left: 16px; 
-    z-index: 1000; 
-}
-
-.filter-patient-button {
-    position: absolute; 
-    top: 52px; 
-    left: 16px; 
-    z-index: 1000; 
-}
-
-.filter-modal-overlay {
+.delete-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -25,7 +11,7 @@
     z-index: 2000;
 }
 
-.filter-modal-window {
+.delete-modal-window {
     width: 500px;
     height: 500px;
     background-color: white;
@@ -41,8 +27,3 @@
     z-index: 3000;
     gap: 26px;
 }
-
-.filter-input {
-    width: 60%;
-}
-

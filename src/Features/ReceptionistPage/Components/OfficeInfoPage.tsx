@@ -10,10 +10,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Office } from '../../UserPage/Types/Office.ts';
+import { updateOffice } from '../Api/OfficeMethods.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const OfficeInfoPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { accessToken } = useAuth();
     const currOffice: Office = location.state?.office;
 
     const getCity = (address: string): string => {
@@ -148,8 +151,14 @@ const OfficeInfoPage: React.FC = () => {
         navigate(config.ReceptionistPageUrl, { state: { isOfficeWindowOpened: true } });
     }
 
-    const handleConfirmBtn = () => {
-        
+    const createAddress = (): string => {
+        return (`${street} ${houseNumber}, ${city}`);
+    }
+
+    const handleConfirmBtn = async () => {
+        const address: string = createAddress();
+        console.log(accessToken);
+        await updateOffice(accessToken, currOffice.id, address, registryPhoneNumber, (status==='Active')?true:false);
     }
 
     return (

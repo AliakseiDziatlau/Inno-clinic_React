@@ -8,6 +8,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
     handleOpenOfficeWindow,
     handleOpenDoctorWindow,
     handleOpenPatientModalWindow,
+    handleOpenReceptionistWindow,
 }) => {
     const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
 
@@ -27,6 +28,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
                     handleOpenDoctorWindow={handleOpenDoctorWindow}
                     handleOpenOfficeWindow={handleOpenOfficeWindow}
                     handleOpenPatientModalWindow={handleOpenPatientModalWindow}
+                    handleOpenReceptionistWindow={handleOpenReceptionistWindow}
                 />
                 :
                 <MenuButton handleOpenMenuBtn={handleOpenMenuBtn} />

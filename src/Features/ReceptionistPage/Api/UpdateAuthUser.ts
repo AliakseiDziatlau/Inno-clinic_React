@@ -26,3 +26,31 @@ export const updateUser = async (email: string, newEmail?: string, phoneNumber?:
         return false;
     }
 };
+
+export const deleteUserByEmail = async (accessToken, email: string): Promise<boolean> => {
+    try {
+        const response = await fetch(`${config.AuthServiceUrl}/${encodeURIComponent(email)}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            },
+        });
+
+        if (response.status === 204) { 
+            console.log(`User with email ${email} deleted successfully`);
+            return true;
+        }
+
+        if (response.status === 404) {
+            console.error(`User with email ${email} not found`);
+            return false;
+        }
+
+        const errorData = await response.json();
+        console.error("Delete error", errorData);
+        return false;
+    } catch (error) {
+        console.error("Fetch error:", error);
+        return false;
+    }
+};

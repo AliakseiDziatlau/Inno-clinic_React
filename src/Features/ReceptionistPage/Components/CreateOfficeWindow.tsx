@@ -10,10 +10,13 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import CancelModalWindow from './CancelModalWindow.tsx';
 import { createOffice } from '../Api/OfficeMethods.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const CreateOfficeWindow: React.FC<CreateOfficeWindowProps> = ({
     handleCloseCreateOfficeWindow,
 }) => {
+    const { accessToken } = useAuth();
+
     const [city, setCity] = useState<string>('');
     const [street, setStreet] = useState<string>('');
     const [houseNumber, setHouseNumber] = useState<string>('');
@@ -128,8 +131,10 @@ const CreateOfficeWindow: React.FC<CreateOfficeWindowProps> = ({
     }
 
     const handleConfirmBtn = async () => {
+        console.log("We are in create office");
+        console.log(accessToken);
         const address: string = createAddress();
-        await createOffice(address, registryPhoneNumber, (status === 'Active')?true:false, 1);
+        await createOffice(accessToken, address, registryPhoneNumber, (status === 'Active')?true:false, 1);
     }
 
     return (

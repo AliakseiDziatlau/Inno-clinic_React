@@ -17,6 +17,10 @@ import '../Styles/PatientModalWindow.css';
 import FilterPatientsModalWindow from './FilterPatientsModalWindow.tsx';
 import { Patient } from '../../../Interfaces/Patient.ts';
 import config from '../../../Configurations/Config.ts';
+import DeleteModalWindow from './DeleteModalWindow.tsx';
+import { deletePatient } from '../Api/PatientsMethods.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import { deleteUserByEmail } from '../Api/UpdateAuthUser.ts';
 
 const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     patientList,
@@ -25,6 +29,9 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     handleOpenCreatePatientWindow,
 }) => {
     const navigate = useNavigate();
+    const { accessToken } = useAuth();
+    
+    const [patientForDeletion, setPatientForDeletion] = useState<Patient | null>(null);
 
     const [isFilterWindowOpened, setIsFilterWindowOpened] = useState<boolean>(false);
     const [filterPatientList, setFilterPatientList] = useState<Patient[]>(patientList);
@@ -32,6 +39,8 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
     const [filterLastName, setFilterLastName] = useState<string>('');
     const [filterPhoneNumber, setFilterPhoneNumber] = useState<string>('');
+
+    const [isDeleteWindowOpened, setIsDeleteWindowOpened] = useState<boolean>(false);
 
     const handleOpenFiltersBtn = () => {
         setIsFilterWindowOpened(true);
@@ -65,6 +74,23 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     useEffect(() => {
         setFilterPatientList(patientList);
     }, [patientList]);
+
+    const handleOpenDeleteWindow = (patient: Patient) => {
+        setIsDeleteWindowOpened(true);
+        setPatientForDeletion(patient);
+    }
+
+    const handleNoOnDeleteWindow = () => {
+        setIsDeleteWindowOpened(false);
+    }
+
+    const handleYesOnDeleteWindow = async () => {
+        if (patientForDeletion !== null) {
+            await deleteUserByEmail(accessToken, patientForDeletion.email);
+            await deletePatient(accessToken, patientForDeletion.id);
+        }
+        setIsDeleteWindowOpened(false);
+    }
 
 
     return (
@@ -117,7 +143,13 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                                     <TableCell>{patient.middleName}</TableCell>
                                     <TableCell>{patient.phoneNumber}</TableCell>
                                     <TableCell>
-                                        <DeleteIcon/>
+                                        <DeleteIcon 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleOpenDeleteWindow(patient);
+                                            }}
+                                            sx={{ cursor: "pointer" }}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -136,6 +168,12 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                             setFilterPhoneNumber={setFilterPhoneNumber}
                             handleApplyBtn={handleApplyBtn}
                             handleCloseFiltersBtn={handleCloseFiltersBtn}
+                        />
+                    }
+                    {isDeleteWindowOpened &&
+                        <DeleteModalWindow 
+                            handleNoOnDeleteWindow={handleNoOnDeleteWindow}
+                            handleYesOnDeleteWindow={handleYesOnDeleteWindow}
                         />
                     }
                 </div>
