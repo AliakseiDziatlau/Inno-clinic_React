@@ -1,6 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { PatientModalWindowProps } from '../Types/PatientModalWindowProps.ts';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -12,26 +10,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import '../Styles/PatientModalWindow.css';
-import FilterPatientsModalWindow from './FilterPatientsModalWindow.tsx';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Patient } from '../../../Interfaces/Patient.ts';
 import config from '../../../Configurations/Config.ts';
-import DeleteModalWindow from './DeleteModalWindow.tsx';
-import { deletePatient } from '../Api/PatientsMethods.ts';
-import { useAuth } from '../../../Contexts/AuthContext.tsx';
-import { deleteUserByEmail } from '../Api/UpdateAuthUser.ts';
+import FilterPatientsModalWindow from '../../ReceptionistPage/Components/FilterPatientsModalWindow.tsx';
 
 const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     patientList,
     isLoading,
-    handleClosePatientModalWindow,
-    handleOpenCreatePatientWindow,
+    handleClosePatientWindow,
 }) => {
     const navigate = useNavigate();
-    const { accessToken } = useAuth();
-    
-    const [patientForDeletion, setPatientForDeletion] = useState<Patient | null>(null);
 
     const [isFilterWindowOpened, setIsFilterWindowOpened] = useState<boolean>(false);
     const [filterPatientList, setFilterPatientList] = useState<Patient[]>(patientList);
@@ -39,8 +29,6 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
     const [filterLastName, setFilterLastName] = useState<string>('');
     const [filterPhoneNumber, setFilterPhoneNumber] = useState<string>('');
-
-    const [isDeleteWindowOpened, setIsDeleteWindowOpened] = useState<boolean>(false);
 
     const handleOpenFiltersBtn = () => {
         setIsFilterWindowOpened(true);
@@ -68,30 +56,12 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
     }
 
     const handlePatientRowClick = (patient: Patient) => {
-        navigate(config.ReceptionistPageChangePatientUrl, { state: { patient, isEditing: true }});
+        navigate(config.ReceptionistPageChangePatientUrl, { state: { patient, isEditing: false }});
     }
 
     useEffect(() => {
         setFilterPatientList(patientList);
     }, [patientList]);
-
-    const handleOpenDeleteWindow = (patient: Patient) => {
-        setIsDeleteWindowOpened(true);
-        setPatientForDeletion(patient);
-    }
-
-    const handleNoOnDeleteWindow = () => {
-        setIsDeleteWindowOpened(false);
-    }
-
-    const handleYesOnDeleteWindow = async () => {
-        if (patientForDeletion !== null) {
-            await deleteUserByEmail(accessToken, patientForDeletion.email);
-            await deletePatient(accessToken, patientForDeletion.id);
-        }
-        setIsDeleteWindowOpened(false);
-    }
-
 
     return (
         <div className="modal-overlay">
@@ -109,15 +79,12 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                     </Box>
                 ) : (
                     <div>
-                        <div className="create-patient-button">
-                            <Button onClick={handleOpenCreatePatientWindow}>Create Patient</Button>
-                        </div>
                         <div className="filter-patient-button">
                             <Button onClick={handleOpenFiltersBtn}>Filter Patients</Button>
                         </div>
                         <button 
                             className="close-button"
-                            onClick={handleClosePatientModalWindow}
+                            onClick={handleClosePatientWindow}
                         >
                             &times;
                         </button>
@@ -142,15 +109,6 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                                     <TableCell>{patient.lastName}</TableCell>
                                     <TableCell>{patient.middleName}</TableCell>
                                     <TableCell>{patient.phoneNumber}</TableCell>
-                                    <TableCell>
-                                        <DeleteIcon 
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleOpenDeleteWindow(patient);
-                                            }}
-                                            sx={{ cursor: "pointer" }}
-                                        />
-                                    </TableCell>
                                 </TableRow>
                             ))}
                             </TableBody>
@@ -168,12 +126,6 @@ const PatientModalWindow: React.FC<PatientModalWindowProps> = ({
                             setFilterPhoneNumber={setFilterPhoneNumber}
                             handleApplyBtn={handleApplyBtn}
                             handleCloseFiltersBtn={handleCloseFiltersBtn}
-                        />
-                    }
-                    {isDeleteWindowOpened &&
-                        <DeleteModalWindow 
-                            handleNoOnDeleteWindow={handleNoOnDeleteWindow}
-                            handleYesOnDeleteWindow={handleYesOnDeleteWindow}
                         />
                     }
                 </div>

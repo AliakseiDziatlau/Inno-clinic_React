@@ -15,6 +15,7 @@ const PatientInfoPage: React.FC = () => {
     const location = useLocation();
     const { accessToken } = useAuth();
     const currPatient: Patient = location.state?.patient;
+    const isEditing: boolean = location.state?.isEditing;
 
     const [currFirstName, setCurrFirstName] = useState<string>(currPatient.firstName);
     const [currLastName, setCurrLastName] = useState<string>(currPatient.lastName);
@@ -140,15 +141,24 @@ const PatientInfoPage: React.FC = () => {
     }
 
     const handleCloseBtn = () => {
-        navigate(config.ReceptionistPageUrl, { state: { isPatientWindowOpened: true } })
+        if (isEditing){
+            navigate(config.ReceptionistPageUrl, { state: { isPatientWindowOpened: true, } })
+        } else {
+            navigate(config.DoctorPageUrl, { state: { isPatientWindowOpened: true, } })
+        }
     }
 
 
     return (
         <div className="create-doctor-container">
-            <div className="edit-button">
+            {isEditing &&
+                <div className="edit-button">
+                    <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
+                </div>
+            }
+            {/* <div className="edit-button">
                 <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
-            </div>
+            </div> */}
             <h1>Patient Information</h1>
             <div className="inline-container">
                 <SimpleDataInput 

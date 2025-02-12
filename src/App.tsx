@@ -11,6 +11,7 @@ import DoctorInfoPage from './Features/ReceptionistPage/Components/DoctorInfoPag
 import OfficeInfoPage from './Features/ReceptionistPage/Components/OfficeInfoPage.tsx';
 import PatientInfoPage from './Features/ReceptionistPage/Components/PatientInfoPage.tsx';
 import ReceptionistInfoPage from './Features/ReceptionistPage/Components/ReceptionistInfoPage.tsx';
+import DoctorPage from './Features/DoctorPage/Components/DoctorPage.tsx';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path={config.ReceptionistPageChangeOfficeUrl} element={<OfficeInfoPage/>}/>
         <Route path={config.ReceptionistPageChangePatientUrl} element={<PatientInfoPage/>}/>
         <Route path={config.ReceptionistPageChangeReceptionistUrl} element={<ReceptionistInfoPage/>}/>
+        <Route path={config.DoctorPageUrl} element={<DoctorPage />}/>
       </Routes >
     </Router>
   );
