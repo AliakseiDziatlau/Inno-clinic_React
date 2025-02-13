@@ -10,8 +10,13 @@ import { useAuth } from '../../../Contexts/AuthContext.tsx';
 import { createReceptionist } from '../Api/ReceptionistMethods.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
+    photoList,
     handleCloseCreateReceptionistWindow,
 }) => {
     const { accessToken } = useAuth();
@@ -24,6 +29,7 @@ const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
     const [office, setOffice] = useState<string>('');
     const [email, setEmail] = useState<string>(''); 
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [photo, setPhoto] = useState<string>('');
 
     const [firstNameError, setFirstNameError] = useState<string>('');
     const [lastNameError, setLastNameError] = useState<string>('');
@@ -149,7 +155,7 @@ const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
         const offices: Office[] = await getOffices();
         const off: Office | undefined = offices.find(off => off.address === office);
 
-        await registerReceptionist(accessToken, email, "MyPassword", phoneNumber);
+        await registerReceptionist(accessToken, email, "MyPassword", phoneNumber, photo);
         await createReceptionist(accessToken, firstName, lastName, middleName, phoneNumber, email, String(off?.id));
     };
 
@@ -221,6 +227,25 @@ const CreateReceptionistWindow: React.FC<CreateReceptionistWindowProps>= ({
                         handleBlur={validateOffice}
                     />
                 </div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Photo</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Office"
+                        value={photo}
+                        onChange={(e) => setPhoto(e.target.value)}
+                    >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {photoList.map((photo) => (
+                        <MenuItem key={photo.id} value={photo.id}> 
+                            {photo.url}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl> 
                 <ButtonGroup 
                     variant="text" 
                     aria-label="Basic button group"

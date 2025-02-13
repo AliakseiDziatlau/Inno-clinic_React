@@ -18,9 +18,15 @@ import ReceptionistModalWindow from './ReceptionistModalWindow.tsx';
 import { Receptionist } from '../../../Interfaces/Receptionist.ts';
 import { getAllReceptionists } from '../Api/ReceptionistMethods.ts';
 import CreateReceptionistWindow from './CreateReceptionistWindow.tsx';
+import { Photo } from '../../../Interfaces/Photo.ts';
+import { User } from '../../../Interfaces/User.ts';
+import { fetchPhotos } from '../../../Methods/PhotoMethods.ts';
+import { fetchUsers } from '../../../Methods/UserMethods.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const ReceptionistPage: React.FC = () => {
     const location = useLocation();
+    const { accessToken } = useAuth();
     const [isCreateDoctorWindowOpened, setIsCreateDoctorWindowOpened] = useState<boolean>(false);
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
     const [isOfficeWindowOpened, setIsOfficeWindowOpened] = useState<boolean>(false);
@@ -31,6 +37,8 @@ const ReceptionistPage: React.FC = () => {
     const [isCreateReceptionistWindowOpened, setIsCreateReceptionistWindowOpened] = useState<boolean>(false);
     const [doctorList, setDoctorList] = useState<Doctor[]>([]);
     const [officeList, setOfficeList] = useState<Office[]>([]);
+    const [photoList, setPhotoList] = useState<Photo[]>([]);
+    const [userList, setUserList] = useState<User[]>([]);
     const [patientList, setPatientList] = useState<Patient[]>([]);
     const [receptionistList, setReceptionistList] = useState<Receptionist[]>([]);
     const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(false);
@@ -85,9 +93,17 @@ const ReceptionistPage: React.FC = () => {
         try {
             const doctors = await getDoctorsList();
             const offices = await getOffices();
+            const photos = await fetchPhotos();
+            const users = await fetchUsers(accessToken);
 
             setDoctorList(doctors);
             setOfficeList(offices);
+            setPhotoList(photos);
+            setUserList(users);
+            console.log("users:")
+            console.log(users);
+            console.log("photos:")
+            console.log(photos);
         } catch (error) {
             console.error("Error with loading data", error);
         } finally {
@@ -189,6 +205,7 @@ const ReceptionistPage: React.FC = () => {
             />
             {isCreateDoctorWindowOpened && 
                 <CreateDoctorWindow 
+                    photoList={photoList}
                     handleCloseCreateDoctorWindow={handleCloseCreateDoctorWindow}
                 />
             }
@@ -197,6 +214,8 @@ const ReceptionistPage: React.FC = () => {
                     handleCloseDoctorWindow={handleCloseDoctorWindow}
                     doctorList={doctorList}
                     officeList={officeList}
+                    photoList={photoList}  
+                    userList={userList}
                     isLoading={isLoadingDoctors}
                     handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
                 />
@@ -211,6 +230,7 @@ const ReceptionistPage: React.FC = () => {
             }
             {isCreateOfficeWindowOpened &&
                 <CreateOfficeWindow 
+                    photoList={photoList}
                     handleCloseCreateOfficeWindow={handleCloseCreateOfficeWindow}
                 />
             }
@@ -224,6 +244,7 @@ const ReceptionistPage: React.FC = () => {
             }
             {isCreatePatientWindowOpened &&
                 <CreatePatientWindow 
+                    photoList={photoList}
                     handleCloseCreatePatientModalWindow={handleCloseCreatePatientModalWindow}
                 />
             }
@@ -238,6 +259,7 @@ const ReceptionistPage: React.FC = () => {
             }
             {isCreateReceptionistWindowOpened &&
                 <CreateReceptionistWindow 
+                    photoList={photoList}
                     handleCloseCreateReceptionistWindow={handleCloseCreateReceptionistWindow}
                 />
             }

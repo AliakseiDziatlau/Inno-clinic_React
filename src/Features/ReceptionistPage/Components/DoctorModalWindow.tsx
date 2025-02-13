@@ -6,15 +6,21 @@ import DoctorCardsContainer from './DoctorCardsContainer.tsx';
 import DoctorFiltersContainer from './DoctorFiltersContainer.tsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { User } from '../../../Interfaces/User.ts';
+import { Photo } from '../../../Interfaces/Photo.ts';
 
 const DoctorModalWindow: React.FC<DoctorModalWindowProps> = ({
     handleCloseDoctorWindow,
     doctorList,
     officeList,
+    photoList,
+    userList,
     isLoading,
     handleOpenCreateDoctorWindow,
 }) => {
     const [filteredDoctorList, setFilteredDoctorList] = useState<Doctor[]>(doctorList);
+    const [filteredUserList, setFilteredUserList] = useState<User[]>(userList);
+    const [filteredPhotoList, setFilteredPhotoList] = useState<Photo[]>(photoList);
 
     return (
         <div className="modal-overlay">
@@ -40,11 +46,17 @@ const DoctorModalWindow: React.FC<DoctorModalWindowProps> = ({
                         </button>
                         <DoctorCardsContainer 
                             filteredDoctorList={filteredDoctorList}
+                            filteredPhotoList={filteredPhotoList}
+                            filteredUserList={filteredUserList}
                         />
                         <DoctorFiltersContainer 
                             doctorList={doctorList}
                             filteredDoctorList={filteredDoctorList}
                             setFilteredDoctorList={setFilteredDoctorList}
+                            filteredUserList={filteredUserList}
+                            setFilteredUserList={setFilteredUserList}
+                            filteredPhotoList={filteredPhotoList}
+                            setFilteredPhotoList={setFilteredPhotoList}
                             officeList={officeList}
                             handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
                         />

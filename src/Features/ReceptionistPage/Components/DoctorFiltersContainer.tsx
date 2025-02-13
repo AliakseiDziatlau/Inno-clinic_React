@@ -12,6 +12,10 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     doctorList,
     filteredDoctorList,
     setFilteredDoctorList,
+    filteredUserList,
+    setFilteredUserList,
+    filteredPhotoList,
+    setFilteredPhotoList,
     officeList,
     handleOpenCreateDoctorWindow
 }) => {
@@ -37,6 +41,9 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
 
             setFilteredDoctorList(filteredDoctorList.filter((doctor) => doctor.officeId === office?.id));
         }
+
+        setFilteredUserList(filteredUserList.filter((user) => filteredDoctorList.some((doctor) => doctor.email === user.email)));
+        setFilteredPhotoList(filteredPhotoList.filter((photo) => filteredUserList.some((user) => user.documentsId === photo.id)));
     }
 
     return (

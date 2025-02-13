@@ -8,8 +8,13 @@ import { CreatePatientWindowProps } from '../Types/CreatePatientWindowProps.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
 import { createPatient } from '../Api/PatientsMethods.ts';
 import { registerPatient } from '../Api/PatientsMethods.ts';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
+    photoList,
     handleCloseCreatePatientModalWindow
 }) => {
     const { accessToken } = useAuth();
@@ -21,6 +26,7 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
     const [dateOfBirth, setDateOfBirth] = useState<string>('');
     const [email, setEmail] = useState<string>(''); 
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [photo, setPhoto] = useState<string>('');
     
     const [firstNameError, setFirstNameError] = useState<string>('');
     const [lastNameError, setLastNameError] = useState<string>('');
@@ -152,7 +158,7 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
     } 
 
     const handleConfirmBtn = async () => {
-        await registerPatient(accessToken, email, "MyPassword", phoneNumber);
+        await registerPatient(accessToken, email, "MyPassword", phoneNumber, photo);
         await createPatient(accessToken, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, true);
     };
 
@@ -224,6 +230,25 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
                         handleBlur={validateDateOfBirth}
                     />
                 </div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Photo</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Office"
+                        value={photo}
+                        onChange={(e) => setPhoto(e.target.value)}
+                    >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {photoList.map((photo) => (
+                        <MenuItem key={photo.id} value={photo.id}> 
+                            {photo.url}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl> 
                 <ButtonGroup 
                     variant="text" 
                     aria-label="Basic button group"

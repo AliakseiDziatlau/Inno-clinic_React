@@ -11,10 +11,12 @@ import { updateUser } from '../Api/UpdateAuthUser.ts';
 import { updateDoctor } from '../Api/DoctorMethods.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const DoctorInfoPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { accessToken } = useAuth();
     const doctor: Doctor = location.state?.doctor;
     const isReceptionist: boolean = location.state?.isReceptionist;
 
@@ -229,7 +231,7 @@ const DoctorInfoPage: React.FC = () => {
         const offices: Office[] = await getOffices();
         const off: Office | undefined = offices.find(off => off.address === office);         
         await updateUser(currEmail, email, phoneNumber);
-        await updateDoctor(doctor.id, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, String(off?.id), Number(startYear), status);
+        await updateDoctor(accessToken, doctor.id, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, String(off?.id), Number(startYear), status);
     }
 
     return (

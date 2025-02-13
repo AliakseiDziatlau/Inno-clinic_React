@@ -9,11 +9,18 @@ import SimpleDataInput from "./SimpleDataInput.tsx";
 import { registerDoctor, createDoctorProfile } from '../Api/DoctorMethods.ts';
 import { getOffices } from "../../UserPage/Api/OfficeMethod.ts";
 import { Office } from "../../UserPage/Types/Office.ts";
+import { useAuth } from "../../../Contexts/AuthContext.tsx";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
 const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
+    photoList,
     handleCloseCreateDoctorWindow,
 }) => {
+    const { accessToken } = useAuth();
     const [isCancelWindowOpened, setIsCancelWindowOpened] = useState<boolean>(false);
 
     const [firstName, setFirstName] = useState<string>('');
@@ -210,8 +217,9 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
             const offices: Office[] = await getOffices();
             const off: Office | undefined = offices.find(off => off.address === office);
     
-            await registerDoctor(email, "MyPassword", phoneNumber);
+            await registerDoctor(accessToken, email, "MyPassword", phoneNumber);
             await createDoctorProfile(
+                accessToken,
                 firstName,
                 lastName,
                 middleName,
@@ -332,6 +340,25 @@ const CreateDoctorWindow: React.FC<CreateDoctorWindowProps> = ({
                             handleBlur={validatePhoneNumber}
                         />
                     </div>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="demo-simple-select-standard-label">Photo</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select-standard"
+                            label="Office"
+                            value={photo}
+                            onChange={(e) => setPhoto(e.target.value)}
+                        >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        {photoList.map((photo) => (
+                            <MenuItem key={photo.id} value={photo.id}> 
+                                {photo.url}
+                            </MenuItem>
+                        ))}
+                        </Select>
+                    </FormControl>                    
                     <ButtonGroup 
                         variant="text" 
                         aria-label="Basic button group"

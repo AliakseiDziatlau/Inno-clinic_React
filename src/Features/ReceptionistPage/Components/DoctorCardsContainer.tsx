@@ -4,9 +4,13 @@ import DoctorCard from './DoctorCard.tsx';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../Configurations/Config.ts';
 import { Doctor } from '../../UserPage/Types/Doctor.ts';
+import { Photo } from '../../../Interfaces/Photo.ts';
+import { User } from '../../../Interfaces/User.ts';
 
 const DoctorCardsContainer: React.FC<DoctorCardsContainerProps> = ({
-    filteredDoctorList
+    filteredDoctorList,
+    filteredPhotoList,
+    filteredUserList,
 }) => {
     const navigate = useNavigate();
 
@@ -14,11 +18,17 @@ const DoctorCardsContainer: React.FC<DoctorCardsContainerProps> = ({
         navigate(config.ReceptionistPageChangeDoctorUrl, { state: { doctor, isReceptionist: true } });
     }
 
+    const getPhotoForDoctor = (doctor: Doctor): Photo | undefined => {
+        const user: User | undefined = filteredUserList.find((user) => user.email === doctor.email);
+        return filteredPhotoList.find((photo) => photo.id === user?.documentsId);
+    }
+
     return (
         <div className="cards-container">
             {filteredDoctorList.map((doctor) => (
                 <DoctorCard
-                    photo={"photo"}
+                    key={doctor.email} 
+                    photo={getPhotoForDoctor(doctor)?.url || "default-photo.jpg"}
                     firstName={doctor.firstName}
                     middleName={doctor.middleName}
                     lastName={doctor.lastName}

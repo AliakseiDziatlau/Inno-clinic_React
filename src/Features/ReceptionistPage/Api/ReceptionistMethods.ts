@@ -32,7 +32,8 @@ export const registerReceptionist = async (
     accessToken,
     email: string,
     password: string,
-    phoneNumber: string
+    phoneNumber: string,
+    documentsId: string,
 ): Promise<boolean> => {
     try {
         const response = await fetch(config.AuthServiceRegisterUrl, {
@@ -46,6 +47,7 @@ export const registerReceptionist = async (
                 password,
                 phoneNumber,
                 role: "Receptionist",
+                documentsId,
             }),
         });
 

@@ -155,7 +155,8 @@ export const registerPatient = async (
     accessToken,
     email: string,
     password: string,
-    phoneNumber: string
+    phoneNumber: string,
+    documentsId: string,
 ): Promise<boolean> => {
     try {
         const response = await fetch(config.AuthServiceRegisterUrl, {
@@ -169,6 +170,7 @@ export const registerPatient = async (
                 password,
                 phoneNumber,
                 role: "Patient",
+                documentsId,
             }),
         });
 

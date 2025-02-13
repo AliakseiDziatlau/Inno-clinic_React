@@ -13,6 +13,7 @@ import { createOffice } from '../Api/OfficeMethods.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const CreateOfficeWindow: React.FC<CreateOfficeWindowProps> = ({
+    photoList,
     handleCloseCreateOfficeWindow,
 }) => {
     const { accessToken } = useAuth();
@@ -23,6 +24,7 @@ const CreateOfficeWindow: React.FC<CreateOfficeWindowProps> = ({
     const [officeNumber, setOfficeNumber] = useState<string>('');
     const [registryPhoneNumber, setRegistryPhoneNumber] = useState<string>('');
     const [status, setStatus] = useState<string>('Active');
+    const [photo, setPhoto] = useState<string>('')
 
     const [cityError, setCityError] = useState<string>('');
     const [streetError, setStreetError] = useState<string>('');
@@ -207,6 +209,25 @@ const CreateOfficeWindow: React.FC<CreateOfficeWindowProps> = ({
                         </Select>
                     </FormControl>
                 </div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label">Photo</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Office"
+                        value={photo}
+                        onChange={(e) => setPhoto(e.target.value)}
+                    >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {photoList.map((photo) => (
+                        <MenuItem key={photo.id} value={photo.id}> 
+                            {photo.url}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl> 
                 <ButtonGroup 
                     variant="text" 
                     aria-label="Basic button group"

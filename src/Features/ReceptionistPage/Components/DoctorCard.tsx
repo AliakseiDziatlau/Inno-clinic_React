@@ -21,8 +21,8 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
             <CardMedia
                 component="img"
                 height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
-                alt="green iguana"
+                image={photo}
+                alt={photo}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

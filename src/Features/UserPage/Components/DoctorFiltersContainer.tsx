@@ -1,9 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import TextField from '@mui/material/TextField';
 import '../Styles/DoctorFiltersContainer.css';
-import Button from '@mui/material/Button';
+import { TextField, Button } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { DoctorFiltersContainerProps } from '../Types/DoctorFiltersContainerProps';
 import config from '../../../Configurations/Config.ts';
 import { Office } from '../Types/Office.ts';
@@ -12,9 +15,12 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
     doctorList,
     filteredDoctorList,
     setFilteredDoctorsList,
+    filteredUserList,
+    setFilteredUserList,
+    filteredPhotoList,
+    setFilteredPhotoList,
     filterOfficeFromMap,
     officeList,
-    isLoading,
 }) => {
     const [filterFirstName, setFilterFirstName] = useState<string>('');
     const [filterMiddleName, setFilterMiddleName] = useState<string>('');
@@ -44,6 +50,9 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
 
             setFilteredDoctorsList(filteredDoctorList.filter((doctor) => doctor.officeId === office?.id))
         }
+
+        setFilteredUserList(filteredUserList.filter((user) => filteredDoctorList.some((doctor) => doctor.email === user.email)));
+        setFilteredPhotoList(filteredPhotoList.filter((photo) => filteredUserList.some((user) => user.documentsId === photo.id)));
     }
 
     return (
@@ -72,14 +81,33 @@ const DoctorFiltersContainer: React.FC<DoctorFiltersContainerProps> = ({
                 value={filterLastName}
                 onChange={(e) => setFilterLastName(e.target.value)} 
             />
-            <TextField 
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-standard-label">Office</InputLabel>
+                <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    label="Office"
+                    value={filterOffice}
+                    onChange={(e) => setFilterOffice(e.target.value)}
+                >
+                <MenuItem value="">
+                    <em>None</em>
+                </MenuItem>
+                {officeList.map((office) => (
+                    <MenuItem key={office.id} value={office.address}> 
+                        {office.address}
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
+            {/* <TextField 
                 id="standard-basic" 
                 label="Office" 
                 variant="standard" 
                 className="filter-input" 
                 value={filterOffice}
                 onChange={(e) => setFilterOffice(e.target.value)}
-            />
+            /> */}
             <Button variant="text" onClick={handleApplyBtn}>Apply</Button>
             <Button variant="text" onClick={handleOpenMapBtn}>Open Map</Button>
         </div>

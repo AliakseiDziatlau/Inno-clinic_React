@@ -1,6 +1,7 @@
 import config from "../../../Configurations/Config.ts";
 
 export const registerDoctor = async (
+    accessToken,
     email: string,
     password: string,
     phoneNumber: string
@@ -8,7 +9,10 @@ export const registerDoctor = async (
     try {
         const response = await fetch(config.AuthServiceRegisterUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            },
             body: JSON.stringify({
                 email,
                 password,
@@ -31,6 +35,7 @@ export const registerDoctor = async (
 };
 
 export const createDoctorProfile = async (
+    accessToken,
     firstName: string,
     lastName: string,
     middleName: string,
@@ -45,7 +50,10 @@ export const createDoctorProfile = async (
     try {
         const response = await fetch(config.ProfilesServiceCreateDoctorsProfileUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            },
             body: JSON.stringify({
                 firstName,
                 lastName,
@@ -74,6 +82,7 @@ export const createDoctorProfile = async (
 };
 
 export const updateDoctor = async (
+    accessToken,
     id: number,
     firstName: string,
     lastName: string,
@@ -90,6 +99,7 @@ export const updateDoctor = async (
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
             },
             credentials: "include",
             body: JSON.stringify({

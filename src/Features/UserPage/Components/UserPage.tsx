@@ -12,12 +12,20 @@ import { Patient } from '../../../Interfaces/Patient.ts';
 import { getAllPatients } from '../../ReceptionistPage/Api/PatientsMethods.ts';
 import { getOffices } from '../Api/OfficeMethod.ts';
 import { Office } from '../Types/Office.ts';
+import { Photo } from '../../../Interfaces/Photo.ts';
+import { fetchPhotos } from '../../../Methods/PhotoMethods.ts';
+import { User } from '../../../Interfaces/User.ts';
+import { fetchUsers } from '../../../Methods/UserMethods.ts';
+import { useAuth } from '../../../Contexts/AuthContext.tsx';
 
 const UserPage: React.FC = () => {
     const location = useLocation();
+    const { accessToken } = useAuth();
     const [isDoctorWindowOpened, setIsDoctorWindowOpened] = useState<boolean>(false);
     const [doctorList, setDoctorList] = useState<Doctor[]>([]);
     const [officeList, setOfficeList] = useState<Office[]>([]);
+    const [photoList, setPhotoList] = useState<Photo[]>([]);
+    const [userList, setUserList] = useState<User[]>([]);
     const [filterOffice, setFilterOffice] = useState<string>("");
     const [isLoadingDoctors, setIsLoadingDoctors] = useState<boolean>(false);
     const [email, setEmail] = useState<string>(() => {
@@ -62,9 +70,17 @@ const UserPage: React.FC = () => {
         try {
             const doctors = await getDoctorsList();
             const offices = await getOffices();
+            const photos = await fetchPhotos();
+            const users = await fetchUsers(accessToken);
 
             setDoctorList(doctors);
             setOfficeList(offices);
+            setPhotoList(photos);
+            setUserList(users);
+            console.log("users:")
+            console.log(users);
+            console.log("photos:")
+            console.log(photos);
         } catch (error) {
             console.error("Error with loading data", error);
         } finally {
@@ -85,7 +101,9 @@ const UserPage: React.FC = () => {
                 closeDoctorsModalWindow={closeDoctorsModalWindow}
                 doctorsList={doctorList}
                 filterOffice={filterOffice}
-                officeList={officeList}   
+                officeList={officeList} 
+                photoList={photoList}  
+                userList={userList}
                 isLoading={isLoadingDoctors}         
             />}
         </div>
