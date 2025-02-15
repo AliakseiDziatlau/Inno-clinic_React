@@ -11,6 +11,7 @@ import { updateUser } from '../Api/UpdateAuthUser.ts';
 import { updateReceptionist } from '../Api/ReceptionistMethods.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
+import LoginPage from '../../Auth/Components/LoginPage.tsx';
 
 const ReceptionistInfoPage: React.FC = () => {
     const navigate = useNavigate();
@@ -43,6 +44,8 @@ const ReceptionistInfoPage: React.FC = () => {
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
 
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+    const role: string = localStorage.getItem('role') || '';
 
     useEffect(() => {
         if (currReceptionist) {
@@ -148,81 +151,88 @@ const ReceptionistInfoPage: React.FC = () => {
         navigate(config.ReceptionistPageUrl, { state: { isReceptionistWindowOpened: true } })
     }
 
-    return (
-        <div className="create-doctor-container">
-            <div className="edit-button">
-                <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
+    if (role === 'Receptionist') {
+        return (
+            <div className="create-doctor-container">
+                <div className="edit-button">
+                    <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
+                </div>
+                <h1>Patient Information</h1>
+                <div className="inline-container">
+                    <SimpleDataInput 
+                        title="First Name"
+                        value={isEditMode ? firstName : currFirstName}
+                        isTouched={isFirstNameTouched}
+                        error={firstNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleFirstNameChange}
+                        handleBlur={validateFirstName}
+                    />
+                    <SimpleDataInput 
+                        title="Last Name"
+                        value={isEditMode ? lastName : currLastName}
+                        isTouched={isLastNameTouched}
+                        error={lastNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleLastNameChange}
+                        handleBlur={validateLastName}
+                    />
+                    <SimpleDataInput 
+                        title="Middle Name"
+                        value={isEditMode ? middleName : currMiddleName}
+                        isTouched={isMiddleNameTouched}
+                        error={middleNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleMiddleNameChange}
+                        handleBlur={validateMiddleName}
+                    />
+                </div>
+                <div className="inline-container">
+                    <SimpleDataInput 
+                        title="Phone Number"
+                        value={isEditMode ? phoneNumber : currPhoneNumber}
+                        isTouched={isPhoneNumberTouched}
+                        error={phoneNumberError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handlePhoneNumberChange}
+                        handleBlur={validatePhoneNumber}
+                    />
+                    <SimpleDataInput 
+                        title="Date Of Birth"
+                        value={isEditMode ? office : currOffice}
+                        isTouched={isOfficeTouched}
+                        error={officeError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleOfficeChange}
+                        handleBlur={validateOffice}
+                    />
+                </div>
+                {isEditMode ? 
+                    (<ButtonGroup 
+                        variant="text" 
+                        aria-label="Basic button group"
+                    >
+                        <Button onClick={handleConfirmBtn}>Confirm</Button>
+                        <Button onClick={handleCancelBtn}>Cancel</Button>
+                    </ButtonGroup>)
+                    :
+                    (
+                        <Button onClick={handleCloseBtn}>Close</Button>
+                    )
+                }
             </div>
-            <h1>Patient Information</h1>
-            <div className="inline-container">
-                <SimpleDataInput 
-                    title="First Name"
-                    value={isEditMode ? firstName : currFirstName}
-                    isTouched={isFirstNameTouched}
-                    error={firstNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleFirstNameChange}
-                    handleBlur={validateFirstName}
-                />
-                <SimpleDataInput 
-                    title="Last Name"
-                    value={isEditMode ? lastName : currLastName}
-                    isTouched={isLastNameTouched}
-                    error={lastNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleLastNameChange}
-                    handleBlur={validateLastName}
-                />
-                <SimpleDataInput 
-                    title="Middle Name"
-                    value={isEditMode ? middleName : currMiddleName}
-                    isTouched={isMiddleNameTouched}
-                    error={middleNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleMiddleNameChange}
-                    handleBlur={validateMiddleName}
-                />
-            </div>
-            <div className="inline-container">
-                <SimpleDataInput 
-                    title="Phone Number"
-                    value={isEditMode ? phoneNumber : currPhoneNumber}
-                    isTouched={isPhoneNumberTouched}
-                    error={phoneNumberError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handlePhoneNumberChange}
-                    handleBlur={validatePhoneNumber}
-                />
-                <SimpleDataInput 
-                    title="Date Of Birth"
-                    value={isEditMode ? office : currOffice}
-                    isTouched={isOfficeTouched}
-                    error={officeError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleOfficeChange}
-                    handleBlur={validateOffice}
-                />
-            </div>
-            {isEditMode ? 
-                (<ButtonGroup 
-                    variant="text" 
-                    aria-label="Basic button group"
-                >
-                    <Button onClick={handleConfirmBtn}>Confirm</Button>
-                    <Button onClick={handleCancelBtn}>Cancel</Button>
-                </ButtonGroup>)
-                :
-                (
-                    <Button onClick={handleCloseBtn}>Close</Button>
-                )
-            }
+        );
+    } else {
+        <div>
+            <LoginPage isFirstPage={false}/>
         </div>
-    );
+    }
+    
 }
 
 export default ReceptionistInfoPage;

@@ -17,6 +17,8 @@ import { fetchPhotos } from '../../../Methods/PhotoMethods.ts';
 import { User } from '../../../Interfaces/User.ts';
 import { fetchUsers } from '../../../Methods/UserMethods.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import LoginPage from '../../Auth/Components/LoginPage.tsx';
+
 
 const UserPage: React.FC = () => {
     const location = useLocation();
@@ -31,6 +33,7 @@ const UserPage: React.FC = () => {
     const [email, setEmail] = useState<string>(() => {
         return location.state?.email || localStorage.getItem("email") || "";
     });
+    const role: string = localStorage.getItem("role") || "";
 
     useEffect(() => {
         if (email) {
@@ -93,21 +96,30 @@ const UserPage: React.FC = () => {
         setFilterOffice("");
     }
 
-    return (
-        <div className="user-container">
-            <GreetingComponent />
-            <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
-            {isDoctorWindowOpened && <DoctorsModalWindow
-                closeDoctorsModalWindow={closeDoctorsModalWindow}
-                doctorsList={doctorList}
-                filterOffice={filterOffice}
-                officeList={officeList} 
-                photoList={photoList}  
-                userList={userList}
-                isLoading={isLoadingDoctors}         
-            />}
-        </div>
-    );
+    if (role === 'Patient') {
+        return (
+            <div className="user-container">
+                <GreetingComponent />
+                <MenuContainer handleOurDoctorsBtn={handleOurDoctorsBtn} />
+                {isDoctorWindowOpened && <DoctorsModalWindow
+                    closeDoctorsModalWindow={closeDoctorsModalWindow}
+                    doctorsList={doctorList}
+                    filterOffice={filterOffice}
+                    officeList={officeList} 
+                    photoList={photoList}  
+                    userList={userList}
+                    isLoading={isLoadingDoctors}         
+                />}
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <LoginPage isFirstPage={false}/>
+            </div>
+        );
+    }
+    
 }
 
 export default UserPage;

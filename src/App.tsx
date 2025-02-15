@@ -17,7 +17,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path={config.LoginPageUrl} element={<LoginPage />}/>
+        <Route path={config.LoginPageUrl} element={<LoginPage isFirstPage={true}/>}/>
         <Route path={config.PatientPageUrl} element={<UserPage />}/>
         <Route path={config.PatientPageProfileUrl} element={<UserProfilePage/>} />
         <Route path={config.PatientPageMapUrl} element={<MapPage />} />

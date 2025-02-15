@@ -12,6 +12,8 @@ import { updateDoctor } from '../Api/DoctorMethods.ts';
 import { Office } from '../../UserPage/Types/Office.ts';
 import { getOffices } from '../../UserPage/Api/OfficeMethod.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import LoginPage from '../../Auth/Components/LoginPage.tsx';
+import { checkIfEmailExists } from '../../Auth/Api/Auth.ts';
 
 const DoctorInfoPage: React.FC = () => {
     const navigate = useNavigate();
@@ -63,6 +65,8 @@ const DoctorInfoPage: React.FC = () => {
     const [isPhoneNumberTouched, setIsPhoneNumberTouched] = useState<boolean>(false);
 
     const [isEditMode, setIsEditMode] = useState<boolean>(false); 
+
+    const role: string = localStorage.getItem('role') || ''; 
 
     const validateFirstName = async () => {
         if (!isEditMode) return;
@@ -146,14 +150,16 @@ const DoctorInfoPage: React.FC = () => {
     };
 
     const validateEmail = async () => {
-        if (!isEditMode) return;
         setIsEmailTouched(true);
+        const isExists: boolean = await checkIfEmailExists(email);
 
         if (!email) {
             setEmailError("Please, enter the email");
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             setEmailError("You've entered an invalid email");
-        } 
+        } else if (isExists) {
+            setEmailError("This email is already exists");
+        }
     };
 
     const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,123 +240,132 @@ const DoctorInfoPage: React.FC = () => {
         await updateDoctor(accessToken, doctor.id, firstName, lastName, middleName, phoneNumber, email, dateOfBirth, String(off?.id), Number(startYear), status);
     }
 
-    return (
-        <div className="create-doctor-container">
-            <div className="edit-button">
-                <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
+    if (role === 'Receptionist' || role === 'Doctor') {
+        return (
+            <div className="create-doctor-container">
+                <div className="edit-button">
+                    <Button onClick={handleEditBtn} className="edit-button">Edit</Button>
+                </div>
+                <h1>Doctor Information</h1>
+                <div className="inline-container">
+                    <SimpleDataInput 
+                        title="First Name"
+                        value={isEditMode ? firstName : currFirstName}
+                        isTouched={isFirstNameTouched}
+                        error={firstNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleFirstNameChange}
+                        handleBlur={validateFirstName}
+                    />
+                    <SimpleDataInput 
+                        title="Last Name"
+                        value={isEditMode ? lastName : currLastName}
+                        isTouched={isLastNameTouched}
+                        error={lastNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleLastNameChange}
+                        handleBlur={validateLastName}
+                    />
+                    < SimpleDataInput 
+                        title="Middle Name"
+                        value={isEditMode ? middleName : currMiddleName}
+                        isTouched={isMiddleNameTouched}
+                        error={middleNameError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleMiddleNameChange}
+                        handleBlur={validateMiddleName}
+                    />
+                </div>
+                <div className="inline-container">
+                    < SimpleDataInput 
+                        title="Date Of Birth"
+                        value={isEditMode ? dateOfBirth : currDateOfBirth}
+                        isTouched={isDateOfBirthTouched}
+                        error={dateOfBirthError}
+                        type="date"
+                        disabled={!isEditMode}
+                        handleChange={handleDateOfBirthChange}
+                        handleBlur={validateDateOfBirth}
+                    />
+                    <SimpleDataInput 
+                        title="E-mail"
+                        value={isEditMode ? email : currEmail}
+                        isTouched={isEmailTouched}
+                        error={emailError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleEmailChange}
+                        handleBlur={validateEmail}
+                    />
+                    < SimpleDataInput 
+                        title="Office"
+                        value={isEditMode ? office : currOffice}
+                        isTouched={isOfficeTouched}
+                        error={officeError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleOfficeChange}
+                        handleBlur={validateOffice}
+                    />
+                </div>
+                <div className="inline-container">
+                    <SimpleDataInput 
+                        title="Start Year"
+                        value={isEditMode ? startYear : currStartYear}
+                        isTouched={isStartYearTouched}
+                        error={startYearError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleStartYearChange}
+                        handleBlur={validateStartYear}
+                    />
+                    <SimpleDataInput 
+                        title="Status"
+                        value={isEditMode ? status : currStatus}
+                        isTouched={isStatusTouched}
+                        error={statusError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handleStatusChange}
+                        handleBlur={validateStatus}
+                    />
+                    <SimpleDataInput 
+                        title="Phone Number"
+                        value={isEditMode ? phoneNumber : currPhoneNumber}
+                        isTouched={isPhoneNumberTouched}
+                        error={phoneNumberError}
+                        type="text"
+                        disabled={!isEditMode}
+                        handleChange={handlePhoneNumberChange}
+                        handleBlur={validatePhoneNumber}
+                    />
+                </div>
+                {isEditMode ? 
+                    (<ButtonGroup 
+                        variant="text" 
+                        aria-label="Basic button group"
+                    >
+                        <Button onClick={handleConfirmBtn}>Confirm</Button>
+                        <Button onClick={handleCancelBtn}>Cancel</Button>
+                    </ButtonGroup>)
+                    :
+                    (
+                        <Button onClick={handleCloseBtn}>Close</Button>
+                    )
+                }
             </div>
-            <h1>Doctor Information</h1>
-            <div className="inline-container">
-                <SimpleDataInput 
-                    title="First Name"
-                    value={isEditMode ? firstName : currFirstName}
-                    isTouched={isFirstNameTouched}
-                    error={firstNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleFirstNameChange}
-                    handleBlur={validateFirstName}
-                />
-                <SimpleDataInput 
-                    title="Last Name"
-                    value={isEditMode ? lastName : currLastName}
-                    isTouched={isLastNameTouched}
-                    error={lastNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleLastNameChange}
-                    handleBlur={validateLastName}
-                />
-                < SimpleDataInput 
-                    title="Middle Name"
-                    value={isEditMode ? middleName : currMiddleName}
-                    isTouched={isMiddleNameTouched}
-                    error={middleNameError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleMiddleNameChange}
-                    handleBlur={validateMiddleName}
-                />
+        );
+    } else {
+        return (
+            <div>
+                <LoginPage isFirstPage={false}/>
             </div>
-            <div className="inline-container">
-                < SimpleDataInput 
-                    title="Date Of Birth"
-                    value={isEditMode ? dateOfBirth : currDateOfBirth}
-                    isTouched={isDateOfBirthTouched}
-                    error={dateOfBirthError}
-                    type="date"
-                    disabled={!isEditMode}
-                    handleChange={handleDateOfBirthChange}
-                    handleBlur={validateDateOfBirth}
-                />
-                <SimpleDataInput 
-                    title="E-mail"
-                    value={isEditMode ? email : currEmail}
-                    isTouched={isEmailTouched}
-                    error={emailError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleEmailChange}
-                    handleBlur={validateEmail}
-                />
-                < SimpleDataInput 
-                    title="Office"
-                    value={isEditMode ? office : currOffice}
-                    isTouched={isOfficeTouched}
-                    error={officeError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleOfficeChange}
-                    handleBlur={validateOffice}
-                />
-            </div>
-            <div className="inline-container">
-                <SimpleDataInput 
-                    title="Start Year"
-                    value={isEditMode ? startYear : currStartYear}
-                    isTouched={isStartYearTouched}
-                    error={startYearError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleStartYearChange}
-                    handleBlur={validateStartYear}
-                />
-                <SimpleDataInput 
-                    title="Status"
-                    value={isEditMode ? status : currStatus}
-                    isTouched={isStatusTouched}
-                    error={statusError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handleStatusChange}
-                    handleBlur={validateStatus}
-                />
-                <SimpleDataInput 
-                    title="Phone Number"
-                    value={isEditMode ? phoneNumber : currPhoneNumber}
-                    isTouched={isPhoneNumberTouched}
-                    error={phoneNumberError}
-                    type="text"
-                    disabled={!isEditMode}
-                    handleChange={handlePhoneNumberChange}
-                    handleBlur={validatePhoneNumber}
-                />
-            </div>
-            {isEditMode ? 
-                (<ButtonGroup 
-                    variant="text" 
-                    aria-label="Basic button group"
-                >
-                    <Button onClick={handleConfirmBtn}>Confirm</Button>
-                    <Button onClick={handleCancelBtn}>Cancel</Button>
-                </ButtonGroup>)
-                :
-                (
-                    <Button onClick={handleCloseBtn}>Close</Button>
-                )
-            }
-        </div>
-    );
+        );
+    }
+    
 }
 
 export default DoctorInfoPage;

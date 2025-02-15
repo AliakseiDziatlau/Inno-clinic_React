@@ -19,6 +19,7 @@ const MenuContainer: React.FC<MenuContainerProps> = ({
         await logout(setAccessToken);
         localStorage.removeItem("email");
         localStorage.removeItem("patient");
+        localStorage.setItem("role", "");
         navigate(config.LoginPageUrl);
     }
 

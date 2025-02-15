@@ -23,6 +23,7 @@ import { User } from '../../../Interfaces/User.ts';
 import { fetchPhotos } from '../../../Methods/PhotoMethods.ts';
 import { fetchUsers } from '../../../Methods/UserMethods.ts';
 import { useAuth } from '../../../Contexts/AuthContext.tsx';
+import LoginPage from '../../Auth/Components/LoginPage.tsx';
 
 const ReceptionistPage: React.FC = () => {
     const location = useLocation();
@@ -45,6 +46,8 @@ const ReceptionistPage: React.FC = () => {
     const [isLoadingOffices, setIsLoadingOffices] = useState<boolean>(false);
     const [isLoadingPatients, setIsLoadingPatients] = useState<boolean>(false);
     const [isLoadingReceptionists, setIsLoadingReceptionists] = useState<boolean>(false);
+
+    const role: string = localStorage.getItem('role') || '';
 
     useEffect(() => {
         const openDoctorWindow = async () => {
@@ -195,76 +198,84 @@ const ReceptionistPage: React.FC = () => {
         setIsCreateReceptionistWindowOpened(true);
     }
 
-    return (
-        <div>
-            <MenuContainer 
-                handleOpenDoctorWindow={handleOpenDoctorWindow}
-                handleOpenOfficeWindow={handleOpenOfficeWindow}
-                handleOpenPatientModalWindow={handleOpenPatientModalWindow}
-                handleOpenReceptionistWindow={handleOpenReceptionistWindow}
-            />
-            {isCreateDoctorWindowOpened && 
-                <CreateDoctorWindow 
-                    photoList={photoList}
-                    handleCloseCreateDoctorWindow={handleCloseCreateDoctorWindow}
+    if (role === 'Receptionist') {
+        return (
+            <div>
+                <MenuContainer 
+                    handleOpenDoctorWindow={handleOpenDoctorWindow}
+                    handleOpenOfficeWindow={handleOpenOfficeWindow}
+                    handleOpenPatientModalWindow={handleOpenPatientModalWindow}
+                    handleOpenReceptionistWindow={handleOpenReceptionistWindow}
                 />
-            }
-            {isDoctorWindowOpened &&
-                <DoctorModalWindow 
-                    handleCloseDoctorWindow={handleCloseDoctorWindow}
-                    doctorList={doctorList}
-                    officeList={officeList}
-                    photoList={photoList}  
-                    userList={userList}
-                    isLoading={isLoadingDoctors}
-                    handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
-                />
-            }
-            {isOfficeWindowOpened &&
-                <OfficeModalWindow 
-                    officeList={officeList}
-                    isLoading={isLoadingOffices}
-                    handleCloseOfficeWindow={handleCloseOfficeWindow}
-                    handleOpenCreateOfficeWindow={handleOpenCreateOfficeWindow}
-                />
-            }
-            {isCreateOfficeWindowOpened &&
-                <CreateOfficeWindow 
-                    photoList={photoList}
-                    handleCloseCreateOfficeWindow={handleCloseCreateOfficeWindow}
-                />
-            }
-            {isPatientWindowOpened &&
-                <PatientModalWindow
-                    patientList={patientList}
-                    isLoading={isLoadingPatients}
-                    handleClosePatientModalWindow={handleClosePatientModalWindow}
-                    handleOpenCreatePatientWindow={handleOpenCreatePatientWindow}
-                />
-            }
-            {isCreatePatientWindowOpened &&
-                <CreatePatientWindow 
-                    photoList={photoList}
-                    handleCloseCreatePatientModalWindow={handleCloseCreatePatientModalWindow}
-                />
-            }
-            {isReceptionistWindowOpened &&
-                <ReceptionistModalWindow 
-                    receptionistsList={receptionistList}
-                    officesList={officeList}
-                    isLoading={isLoadingReceptionists}
-                    handleCloseReceptionistWindow={handleCloseReceptionistWindow}
-                    handleOpenCreateReceptionistWindow={handleOpenCreateReceptionistWindow}
-                />
-            }
-            {isCreateReceptionistWindowOpened &&
-                <CreateReceptionistWindow 
-                    photoList={photoList}
-                    handleCloseCreateReceptionistWindow={handleCloseCreateReceptionistWindow}
-                />
-            }
-        </div>
-    );
+                {isCreateDoctorWindowOpened && 
+                    <CreateDoctorWindow 
+                        photoList={photoList}
+                        handleCloseCreateDoctorWindow={handleCloseCreateDoctorWindow}
+                    />
+                }
+                {isDoctorWindowOpened &&
+                    <DoctorModalWindow 
+                        handleCloseDoctorWindow={handleCloseDoctorWindow}
+                        doctorList={doctorList}
+                        officeList={officeList}
+                        photoList={photoList}  
+                        userList={userList}
+                        isLoading={isLoadingDoctors}
+                        handleOpenCreateDoctorWindow={handleOpenCreateDoctorWindow}
+                    />
+                }
+                {isOfficeWindowOpened &&
+                    <OfficeModalWindow 
+                        officeList={officeList}
+                        isLoading={isLoadingOffices}
+                        handleCloseOfficeWindow={handleCloseOfficeWindow}
+                        handleOpenCreateOfficeWindow={handleOpenCreateOfficeWindow}
+                    />
+                }
+                {isCreateOfficeWindowOpened &&
+                    <CreateOfficeWindow 
+                        photoList={photoList}
+                        handleCloseCreateOfficeWindow={handleCloseCreateOfficeWindow}
+                    />
+                }
+                {isPatientWindowOpened &&
+                    <PatientModalWindow
+                        patientList={patientList}
+                        isLoading={isLoadingPatients}
+                        handleClosePatientModalWindow={handleClosePatientModalWindow}
+                        handleOpenCreatePatientWindow={handleOpenCreatePatientWindow}
+                    />
+                }
+                {isCreatePatientWindowOpened &&
+                    <CreatePatientWindow 
+                        photoList={photoList}
+                        handleCloseCreatePatientModalWindow={handleCloseCreatePatientModalWindow}
+                    />
+                }
+                {isReceptionistWindowOpened &&
+                    <ReceptionistModalWindow 
+                        receptionistsList={receptionistList}
+                        officesList={officeList}
+                        isLoading={isLoadingReceptionists}
+                        handleCloseReceptionistWindow={handleCloseReceptionistWindow}
+                        handleOpenCreateReceptionistWindow={handleOpenCreateReceptionistWindow}
+                    />
+                }
+                {isCreateReceptionistWindowOpened &&
+                    <CreateReceptionistWindow 
+                        photoList={photoList}
+                        handleCloseCreateReceptionistWindow={handleCloseCreateReceptionistWindow}
+                    />
+                }
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <LoginPage isFirstPage={false}/>
+            </div>
+        );
+    }
 }
 
 export default ReceptionistPage;

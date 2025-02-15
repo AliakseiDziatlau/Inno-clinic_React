@@ -1,9 +1,17 @@
 .login-page-container{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh; 
     flex-direction: column;
+}
+
+.button-top-right {
+    position: absolute;
+    top: 20px; 
+    right: 20px; 
+    z-index: 1000; 
 }
 
 .inno-clinic{

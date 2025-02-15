@@ -7,6 +7,7 @@ import { getAllPatients } from '../../ReceptionistPage/Api/PatientsMethods.ts';
 import { useLocation } from 'react-router-dom';
 import { Doctor } from '../../UserPage/Types/Doctor.ts';
 import { getDoctorsList } from '../../UserPage/Api/DoctorMethods.ts';
+import LoginPage from '../../Auth/Components/LoginPage.tsx';
 
 const DoctorPage: React.FC = () => {
     const [isPatientWindowOpened, setIsPatientWindowOpened] = useState<boolean>(false);
@@ -16,6 +17,8 @@ const DoctorPage: React.FC = () => {
     const [email, setEmail] = useState<string>(() => {
         return location.state?.email || localStorage.getItem("email") || "";
     });
+
+    const role: string = localStorage.getItem('role') || '';
 
     useEffect(() => {
         if (email) {
@@ -67,20 +70,29 @@ const DoctorPage: React.FC = () => {
         setIsPatientWindowOpened(false);
     }
 
-    return (
-        <div>
-            <MenuContainer 
-                handleOpenPatientWindow={handleOpenPatientWindow}
-            />
-            {isPatientWindowOpened &&
-                <PatientModalWindow
-                    patientList={patientList}
-                    isLoading={isLoadingPatient}
-                    handleClosePatientWindow={handleClosePatientWindow}
+    if (role === 'Doctor') {
+        return (
+            <div>
+                <MenuContainer 
+                    handleOpenPatientWindow={handleOpenPatientWindow}
                 />
-            }
-        </div>
-    );
+                {isPatientWindowOpened &&
+                    <PatientModalWindow
+                        patientList={patientList}
+                        isLoading={isLoadingPatient}
+                        handleClosePatientWindow={handleClosePatientWindow}
+                    />
+                }
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <LoginPage isFirstPage={false}/>
+            </div>
+        );
+    }
+    
 }
 
 export default DoctorPage;

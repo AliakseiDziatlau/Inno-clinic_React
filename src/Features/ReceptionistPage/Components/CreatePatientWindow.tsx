@@ -12,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { checkIfEmailExists } from '../../Auth/Api/Auth.ts';
 
 const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
     photoList,
@@ -95,12 +96,15 @@ const CreatePatientWindow: React.FC<CreatePatientWindowProps> = ({
 
     const validateEmail = async () => {
         setIsEmailTouched(true);
+        const isExists: boolean = await checkIfEmailExists(email);
 
         if (!email) {
             setEmailError("Please, enter the email");
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             setEmailError("You've entered an invalid email");
-        } 
+        } else if (isExists) {
+            setEmailError("This email is already exists");
+        }
     };
 
     const isFormValid = (): boolean => {

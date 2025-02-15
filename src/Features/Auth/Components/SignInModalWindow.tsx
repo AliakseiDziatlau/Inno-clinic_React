@@ -51,19 +51,23 @@ const SignInModalWindow: React.FC<SignInModalWindowProps> = ({
     useEffect(() => {
         if (accessToken && isSigningIn) {
             console.log(`Access token: ${accessToken}`);
+    
             if (role === 'Patient') {
-                navigate(config.PatientPageUrl, { state: {email}} );
+                localStorage.setItem("role", "Patient");  
+                navigate(config.PatientPageUrl, { state: { email } });
             } else if (role === 'Doctor') {
-                navigate(config.DoctorPageUrl, { state: {email}} );
-            } else if(role === 'Receptionist') {
-                navigate(config.ReceptionistPageUrl, { state: {email}} )
+                localStorage.setItem("role", "Doctor");  
+                navigate(config.DoctorPageUrl, { state: { email } });
+            } else if (role === 'Receptionist') {
+                localStorage.setItem("role", "Receptionist");  
+                navigate(config.ReceptionistPageUrl, { state: { email } });
             } else {
                 console.error("role is undefined");
             }
-
+    
             setIsSigningIn(false);
         }
-    }, [accessToken, isSigningIn, navigate, email]);
+    }, [accessToken, isSigningIn, navigate, email, role]); 
 
 
     const isFormValid = (): boolean => {

@@ -16,6 +16,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({
 
     const handleSingOutBtn = async () => {
         await logout(setAccessToken);
+        localStorage.setItem("role", "");
         navigate(config.LoginPageUrl);
     }
 
